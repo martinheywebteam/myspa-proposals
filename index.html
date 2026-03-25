@@ -195,4 +195,8 @@ footer{text-align:center;padding:60px 40px 40px;background:var(--black);border-t
 function cM(){document.getElementById('mm').classList.remove('open');document.querySelector('.hamburger').classList.remove('active')}
 function setLang(l){document.documentElement.lang=l;document.querySelectorAll('.lang-switcher button').forEach(b=>b.classList.remove('active'));document.querySelector('.lang-switcher button[onclick*="\''+l+"\'"+']').classList.add('active')}
 function setGateLang(l){document.documentElement.lang=l;document.querySelectorAll('#gate .glang button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
-function checkPass(){var p=document.getElementById('gatePass').value;if(p==='evn2026'){document.getElementById('gate').style.display='none';document.getElementById('proposal').style.display='block'}else{document.getElementById('gateError').classList.add('show');document.getElementById('ga
+function checkPass(){var p=document.getElementById('gatePass').value;if(p==='evn2026'){document.getElementById('gate').style.display='none';document.getElementById('proposal').style.display='block'}else{document.getElementById('gateError').classList.add('show');document.getElementById('gatePass').value='';document.getElementById('gatePass').focus();setTimeout(function(){document.getElementById('gateError').classList.remove('show')},3000)}}
+document.getElementById('gatePass').focus();
+</script>
+</body>
+</html>
