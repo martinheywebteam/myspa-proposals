@@ -64,6 +64,7 @@ footer{text-align:center;padding:60px 40px 40px;background:var(--black);border-t
 <div class="ge" id="gateError"><span data-lang="mk">Погрешна лозинка.</span><span data-lang="en">Wrong password.</span></div>
 <div class="glang"><button class="active" onclick="setGateLang('mk')">MK</button><button onclick="setGateLang('en')">EN</button></div>
 <div class="gf"><span>Здравје.</span> <span>Превенција.</span> <span>Продуктивност.</span><br><span style="color:var(--gray-500)">www.myspa.mk</span></div>
+<div class="gf" style="margin-top:24px;font-size:.65rem;opacity:.5"><span data-lang="mk">Посети:</span><span data-lang="en">Visits:</span> <span id="visitCount">–</span></div>
 </div></div>
 <div id="proposal">
 <div class="lang-switcher"><button class="active" onclick="setLang('mk')">MK</button><button onclick="setLang('en')">EN</button></div>
@@ -197,6 +198,7 @@ function setLang(l){document.documentElement.lang=l;document.querySelectorAll('.
 function setGateLang(l){document.documentElement.lang=l;document.querySelectorAll('#gate .glang button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
 function checkPass(){var p=document.getElementById('gatePass').value;if(p==='evn2026'){document.getElementById('gate').style.display='none';document.getElementById('proposal').style.display='block'}else{document.getElementById('gateError').classList.add('show');document.getElementById('gatePass').value='';document.getElementById('gatePass').focus();setTimeout(function(){document.getElementById('gateError').classList.remove('show')},3000)}}
 document.getElementById('gatePass').focus();
+(function(){var el=document.getElementById('visitCount');fetch('https://api.counterapi.dev/v1/evn-massage-proposal/visits/up').then(function(r){return r.json()}).then(function(d){el.textContent=d.count}).catch(function(){el.textContent='–'})})();
 </script>
 </body>
 </html>
