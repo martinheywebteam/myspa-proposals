@@ -1,10 +1,17 @@
-# My Spa — EVN Corporate Massage Proposal
+# My Spa — Proposals
 
-Password-protected bilingual (MK/EN) proposal for corporate massage and preventive exercise programme for EVN Macedonia.
+Password-protected bilingual (MK/EN) corporate wellness proposals.
 
-**Live:** [View Proposal](https://martinheywebteam.github.io/evn-massage-proposal/)
+**Domain:** [proposals.myspa.mk](https://proposals.myspa.mk)
 
-**Password:** `evn2026`
+---
+
+## Proposals
+
+| Client | Link | Password | Status |
+|--------|------|----------|--------|
+| EVN Macedonia | [/evn](https://proposals.myspa.mk/evn) | `evn2026` | Live |
+| LIDL Macedonia | [/lidl](https://proposals.myspa.mk/lidl) | `lidl2026` | Draft |
 
 ---
 
