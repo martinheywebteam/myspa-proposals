@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>My Spa × EVN — Вашето тело е вашата главна алатка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#000;--dark:#0a0a0a;--dark-surface:#111;--dark-card:#161616;
+  --navy:#021842;--blue:#335FAA;--blue-light:#4082A5;--blue-bright:#5B8FD4;--teal:#4AACC5;
+  --white:#fff;--gray-400:#8c9baa;--gray-500:#6b7a8a;--text-light:#d4d8dd;--text-muted:#9ca3af;
+  --red:#e05a4e;
+  --grad:linear-gradient(135deg,#335FAA 0%,#4082A5 50%,#4AACC5 100%);
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --line:rgba(255,255,255,.08);
+  --glass:rgba(255,255,255,.035);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:'Montserrat',sans-serif;background:var(--dark);color:var(--text-light);overflow:hidden;line-height:1.6}
+::selection{background:rgba(51,95,170,.5)}
+svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+#deck{display:none}
+
+/* ---------- stage & slides ---------- */
+.slide{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:72px 64px;opacity:0;visibility:hidden;transform:translateY(28px) scale(.995);transition:opacity .6s var(--ease),transform .6s var(--ease),visibility 0s linear .6s;overflow:hidden}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.slide.bye{opacity:0;visibility:hidden;transform:translateY(-18px) scale(.99)}
+.wrap{position:relative;z-index:2;width:100%;max-width:1080px}
+.slide::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 700px 520px at 12% 8%,rgba(51,95,170,.13) 0%,transparent 70%),radial-gradient(ellipse 600px 480px at 92% 96%,rgba(74,172,197,.07) 0%,transparent 70%);pointer-events:none}
+.slide.plain::before{background:none}
+
+/* typography */
+.kicker{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.22em;color:var(--blue-bright);margin-bottom:18px}
+h1{font-size:clamp(2.3rem,5vw,3.5rem);font-weight:800;line-height:1.12;color:var(--white);letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3.1vw,2.35rem);font-weight:800;line-height:1.18;color:var(--white);letter-spacing:-.01em;margin-bottom:14px}
+.accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.bar{width:56px;height:4px;background:var(--grad);border-radius:2px;margin:22px 0 34px}
+.lead{font-size:1rem;color:var(--text-muted);max-width:640px;line-height:1.75}
+.lead strong,.note strong{color:var(--white);font-weight:600}
+.statement{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;line-height:1.35;color:var(--white);max-width:880px}
+.note{margin-top:34px;font-size:.9rem;color:var(--text-muted);line-height:1.75;max-width:720px}
+.note.center{margin-left:auto;margin-right:auto}
+.tcenter{text-align:center}.tcenter .bar{margin-left:auto;margin-right:auto}
+
+/* reveal choreography: .a items stagger in when slide activates */
+.a{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(.15s + var(--i,0)*.09s)}
+.slide.active .a{opacity:1;transform:none}
+/* manual fragments */
+.fr{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.fr.on{opacity:1;transform:none}
+
+/* cards */
+.cards{display:grid;gap:16px}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c2{grid-template-columns:repeat(2,1fr)}
+.card{position:relative;background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 24px;backdrop-filter:blur(8px)}
+.card .ic-wrap{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(51,95,170,.14);color:var(--blue-bright);margin-bottom:16px}
+.card h3{font-size:.95rem;font-weight:700;color:var(--white);margin-bottom:6px}
+.card p{font-size:.82rem;color:var(--text-muted);line-height:1.65}
+.card.hl{background:linear-gradient(160deg,rgba(51,95,170,.16),rgba(74,172,197,.08));border-color:rgba(91,143,212,.35)}
+.card.hl .ic-wrap{background:var(--grad);color:var(--white)}
+.card.hl::after{content:'';position:absolute;inset:0;border-radius:18px;box-shadow:0 0 60px rgba(51,95,170,.18) inset;pointer-events:none}
+
+/* check / cross rows */
+.row{display:flex;align-items:flex-start;gap:12px;font-size:.9rem;color:var(--text-light);line-height:1.55}
+.row+.row{margin-top:13px}
+.row .tick,.row .cross{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.row .tick{background:rgba(74,172,197,.15);color:var(--teal)}
+.row .cross{background:rgba(224,90,78,.13);color:var(--red)}
+.row .tick svg,.row .cross svg{width:11px;height:11px;stroke-width:2.5}
+.row strong{color:var(--white);font-weight:600}
+.row.dim{color:var(--gray-500)}
+.row.dim s{text-decoration-color:rgba(224,90,78,.5)}
+
+/* panels (left/right comparison) */
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:30px 28px}
+.panel .ph{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;margin-bottom:22px;display:flex;align-items:center;gap:8px}
+.panel.bad .ph{color:var(--red)}
+.panel.good .ph{color:var(--teal)}
+.panel.good{background:linear-gradient(160deg,rgba(74,172,197,.09),rgba(51,95,170,.05));border-color:rgba(74,172,197,.25)}
+
+/* HUD */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--grad);width:0;z-index:500;transition:width .5s var(--ease)}
+#hud{position:fixed;left:0;right:0;bottom:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;pointer-events:none;font-size:.68rem;color:var(--gray-500)}
+#hud .sec{text-transform:uppercase;letter-spacing:.14em;font-weight:600}
+#hud .cnt{pointer-events:auto;cursor:pointer;letter-spacing:.1em;font-weight:600;transition:color .25s}
+#hud .cnt:hover{color:var(--white)}
+#hudlogo{position:fixed;top:20px;left:28px;z-index:500;height:20px;opacity:.75}
+#hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:500;font-size:.65rem;color:var(--gray-500);letter-spacing:.08em;transition:opacity .8s;pointer-events:none}
+#hint.gone{opacity:0}
+#hint b{color:var(--gray-400);font-weight:600}
+
+/* overview (Esc) */
+#toc{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center}
+#toc.open{display:flex}
+#toc .ti{max-width:880px;width:92%;max-height:82vh;overflow-y:auto;padding:20px;scrollbar-width:thin}
+#toc h4{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--blue-bright);margin-bottom:20px}
+#toc .tg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 28px}
+#toc button{display:flex;align-items:baseline;gap:14px;background:none;border:none;color:var(--gray-400);font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:500;padding:9px 10px;border-radius:10px;cursor:pointer;text-align:left;transition:all .25s;width:100%}
+#toc button:hover{background:rgba(255,255,255,.05);color:var(--white)}
+#toc button.now{color:var(--white);background:rgba(51,95,170,.18)}
+#toc button .n{font-size:.65rem;font-weight:700;color:var(--blue-bright);min-width:20px}
+
+/* ---------- slide-specific ---------- */
+/* S1 title */
+#s1 .hero-logo{height:44px;margin-bottom:54px}
+#s1 .meta{display:flex;gap:44px;margin-top:48px;font-size:.78rem;color:var(--text-muted)}
+#s1 .meta b{display:block;color:var(--white);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+#s1 .arc{position:absolute;top:-150px;right:-150px;width:430px;height:430px;border:52px solid;border-color:rgba(75,90,160,.4) rgba(51,95,170,.5) rgba(64,130,165,.32) rgba(75,90,160,.22);border-radius:50%;animation:spin 30s linear infinite;z-index:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* S2 agenda */
+.ag{display:flex;flex-direction:column;gap:10px}
+.ag .it{display:flex;align-items:center;gap:26px;padding:19px 26px;border:1px solid var(--line);border-radius:16px;background:var(--glass);transition:border-color .3s}
+.ag .it:hover{border-color:rgba(91,143,212,.3)}
+.ag .num{font-size:1.5rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;min-width:52px}
+.ag .tt{font-size:1.02rem;font-weight:700;color:var(--white)}
+.ag .ds{font-size:.78rem;color:var(--gray-500);margin-top:2px}
+
+/* S4 body chain */
+.chainrow{display:grid;grid-template-columns:300px 1fr;gap:56px;align-items:center}
+#bodySvg{width:100%;max-width:280px;display:block;margin:0 auto}
+#bodySvg .outline{stroke:rgba(255,255,255,.28);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#bodySvg .spot{fill:var(--teal);opacity:0;transform-origin:center;transform-box:fill-box}
+#bodySvg .halo{fill:none;stroke:var(--teal);stroke-width:1.5;opacity:0;transform-origin:center;transform-box:fill-box}
+.slide.active #bodySvg .spot{animation:pop .6s var(--ease) forwards}
+.slide.active #bodySvg .halo{animation:halo 2.4s ease-out infinite}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+@keyframes halo{0%{opacity:.7;transform:scale(.5)}70%{opacity:0;transform:scale(1.9)}100%{opacity:0;transform:scale(1.9)}}
+.chain-it{display:flex;gap:18px;align-items:flex-start;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:var(--glass)}
+.chain-it+.chain-it{margin-top:14px}
+.chain-it .dot{width:34px;height:34px;border-radius:50%;background:rgba(74,172,197,.13);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;flex-shrink:0}
+.chain-it p{font-size:.88rem;line-height:1.6}
+.chain-it b{color:var(--white);font-weight:700}
+
+/* S5 two workers */
+.vs{display:grid;grid-template-columns:1fr 44px 1fr;gap:20px;align-items:stretch}
+.vs .mid{display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:var(--gray-500);letter-spacing:.1em}
+.wcard{border-radius:20px;padding:30px 28px;border:1px solid var(--line)}
+.wcard.left{background:rgba(255,255,255,.025)}
+.wcard.right{background:linear-gradient(160deg,rgba(51,95,170,.15),rgba(74,172,197,.07));border-color:rgba(91,143,212,.35)}
+.wcard .age{font-size:2.1rem;font-weight:800;color:var(--white);line-height:1}
+.wcard .who{font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;color:var(--gray-500);font-weight:600;margin:6px 0 24px}
+.wcard.right .who{color:var(--blue-bright)}
+
+/* S6 journey timeline */
+.tl{position:relative;margin:46px 0 10px}
+.tl .track{position:absolute;top:26px;left:3%;right:3%;height:2px;background:rgba(255,255,255,.09)}
+.tl .trackfill{position:absolute;top:26px;left:3%;height:2px;background:var(--grad);width:0;transition:width 2.6s var(--ease) .4s}
+.slide.active .tl .trackfill{width:94%}
+.tl .stops{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.stop{text-align:center;padding:0 8px}
+.stop .bub{width:52px;height:52px;margin:0 auto;border-radius:50%;background:var(--dark-card);border:1px solid rgba(91,143,212,.4);color:var(--blue-bright);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.stop h5{font-size:.8rem;font-weight:700;color:var(--white);margin:14px 0 7px}
+.stop p{font-size:.68rem;color:var(--gray-500);line-height:1.6}
+
+/* S7 counters */
+.cnts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+.cnt-c{text-align:center;padding:28px 14px;border:1px solid var(--line);border-radius:18px;background:var(--glass)}
+.cnt-c .val{font-size:clamp(1.9rem,3.6vw,2.7rem);font-weight:800;color:var(--white);line-height:1;font-variant-numeric:tabular-nums}
+.cnt-c .val small{font-size:.45em;font-weight:700;color:var(--blue-bright)}
+.cnt-c .lab{font-size:.72rem;color:var(--gray-500);margin-top:10px;line-height:1.5}
+.sum{margin-top:26px;text-align:center}
+.sum .arrow{color:var(--gray-500);font-size:1.1rem;margin-bottom:12px}
+.sum .bigbar{height:12px;border-radius:6px;background:rgba(255,255,255,.06);max-width:560px;margin:0 auto 14px;overflow:hidden}
+.sum .bigbar i{display:block;height:100%;width:0;background:var(--grad);border-radius:6px;transition:width 1.8s var(--ease) 1.2s}
+.slide.active .sum .bigbar i{width:100%}
+.sum h3{font-size:1.15rem;font-weight:800;color:var(--white);letter-spacing:.01em}
+
+/* S8 signal pills */
+.pills{display:flex;flex-wrap:wrap;gap:14px;max-width:820px}
+.pill{display:flex;align-items:center;gap:12px;padding:15px 22px;border-radius:999px;border:1px solid rgba(91,143,212,.3);background:rgba(51,95,170,.1);font-size:.9rem;font-weight:600;color:var(--white)}
+.pill svg{color:var(--blue-bright)}
+
+/* S10 flip cards */
+.flips{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;perspective:1400px;margin-top:6px}
+.flip{position:relative;height:190px;transform-style:preserve-3d;transition:transform .8s var(--ease);transition-delay:calc(var(--i,0)*.12s)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:18px;text-align:center}
+.flip .f{background:var(--dark-card)}
+.flip .b{background:linear-gradient(160deg,rgba(51,95,170,.2),rgba(74,172,197,.1));border-color:rgba(91,143,212,.4);transform:rotateY(180deg)}
+.flip h5{font-size:.88rem;font-weight:700;color:var(--white)}
+.flip .f svg.ic,.flip .b svg.ic{width:30px;height:30px}
+.flip .f svg.ic{color:var(--gray-400)}
+.flip .b svg.ic{color:var(--teal)}
+#s10.flipped .flip{transform:rotateY(180deg)}
+.swap-h{display:flex;align-items:center;gap:14px;margin-bottom:26px;min-height:34px}
+.swap-h .sw{font-size:1.05rem;font-weight:700;color:var(--white);transition:opacity .5s var(--ease)}
+#s10 .sw.body{display:none}
+#s10.flipped .sw.car{display:none}
+#s10.flipped .sw.body{display:block}
+
+/* S12 water */
+.waterrow{display:grid;grid-template-columns:240px 1fr;gap:60px;align-items:center}
+#glassSvg{width:150px;display:block;margin:0 auto}
+#glassSvg .g-out{stroke:rgba(255,255,255,.3);stroke-width:2.5;fill:none;stroke-linecap:round}
+#glassSvg .g-fill{fill:url(#wgrad);transform-origin:50% 100%;transform:scaleY(0);transition:transform 2.2s var(--ease) .5s}
+.slide.active #glassSvg .g-fill{transform:scaleY(1)}
+.tips{margin-top:26px;border:1px solid rgba(74,172,197,.25);background:rgba(74,172,197,.06);border-radius:16px;padding:20px 24px}
+.tips h6{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--teal);margin-bottom:14px}
+.tips .row{font-size:.82rem}
+.tips .row+.row{margin-top:9px}
+
+/* S13 sleep */
+#s13{background:radial-gradient(ellipse 900px 620px at 75% 0%,rgba(2,24,66,.85) 0%,rgba(10,10,10,0) 65%),var(--dark)}
+#s13 .moon{position:absolute;top:64px;right:96px;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#5B8FD4,#335FAA 70%);box-shadow:0 0 90px rgba(91,143,212,.4);opacity:.9}
+#s13 .moon::after{content:'';position:absolute;top:12px;left:8px;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 60% 40%,rgba(255,255,255,.25),transparent 60%)}
+
+/* S14 day arc */
+.dayarc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px}
+.day-c{border-radius:20px;padding:28px 24px;border:1px solid var(--line);background:var(--glass);position:relative;overflow:hidden}
+.day-c .glow{position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;filter:blur(40px);opacity:.4}
+.day-c.d1 .glow{background:#e8a04c}
+.day-c.d2 .glow{background:var(--teal)}
+.day-c.d3 .glow{background:var(--blue)}
+.day-c .when{font-size:.66rem;text-transform:uppercase;letter-spacing:.15em;font-weight:700;color:var(--gray-500);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.day-c h3{font-size:1.15rem;font-weight:800;color:var(--white);margin-bottom:8px}
+.day-c p{font-size:.8rem;color:var(--text-muted);line-height:1.65}
+.vids{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.vid{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:12px;background:rgba(51,95,170,.12);border:1px solid rgba(91,143,212,.3);font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--white)}
+.vid svg{color:var(--blue-bright);width:16px;height:16px}
+
+/* S17 5-5-5 */
+.rule555{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.r5{text-align:center;padding:40px 22px 32px;border-radius:22px;border:1px solid var(--line);background:var(--glass);position:relative;overflow:hidden}
+.r5 .n5{font-size:4.4rem;font-weight:900;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.r5 h4{font-size:.95rem;font-weight:800;color:var(--white);margin:14px 0 6px}
+.r5 p{font-size:.75rem;color:var(--gray-500)}
+.r5::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:var(--grad);opacity:.6}
+
+/* S18 pillars */
+#pillarsSvg{width:100%;max-width:720px;display:block;margin:12px auto 0}
+#pillarsSvg .stroke{stroke:rgba(255,255,255,.35);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#pillarsSvg .col{fill:rgba(51,95,170,.16);stroke:rgba(91,143,212,.55);stroke-width:1.5;opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+#pillarsSvg .roof{fill:rgba(74,172,197,.1);stroke:var(--teal);stroke-width:2;opacity:0;transform:translateY(-12px);transition:opacity .7s var(--ease) .8s,transform .7s var(--ease) .8s}
+#pillarsSvg text{font-family:'Montserrat',sans-serif;fill:var(--text-light)}
+#pillarsSvg .plabel{font-size:12.5px;font-weight:600;text-anchor:middle;fill:#d4d8dd}
+#pillarsSvg .rlabel{font-size:15px;font-weight:800;text-anchor:middle;fill:#fff;letter-spacing:.04em}
+.slide.active #pillarsSvg .col{opacity:1;transform:none}
+.slide.active #pillarsSvg .roof{opacity:1;transform:none}
+
+/* S20 myth */
+#s20 .myth-q{font-size:clamp(1.4rem,2.8vw,2rem);font-weight:600;font-style:italic;color:var(--text-light);max-width:820px}
+#s20 .myth-no{font-size:clamp(2rem,4.4vw,3.1rem);font-weight:900;color:var(--red);letter-spacing:.02em;margin:26px 0 10px}
+#s20 .myth-line{font-size:1.05rem;color:var(--text-muted);margin-bottom:36px}
+#s20 .myth-line strong{color:var(--white)}
+
+/* S23 tasks */
+.tasks{counter-reset:t;max-width:760px}
+.task{display:flex;gap:20px;align-items:baseline;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:1.02rem;font-weight:600;color:var(--white)}
+.task .tn{font-size:.75rem;font-weight:800;color:var(--blue-bright);min-width:26px}
+.quote{margin-top:38px;padding:26px 30px;border-left:3px solid var(--teal);background:rgba(74,172,197,.06);border-radius:0 16px 16px 0;font-size:.95rem;font-style:italic;color:var(--text-light);line-height:1.8;max-width:760px}
+
+/* S24 closing scene */
+#s24{background:var(--black)}
+#s24 .sunG{opacity:.45;transform:translateY(34px);transition:opacity 1.4s var(--ease),transform 1.4s var(--ease)}
+#s24.sun1 .sunG{opacity:.75;transform:translateY(16px)}
+#s24.sun2 .sunG{opacity:1;transform:translateY(0)}#s24 .statement{text-shadow:0 2px 26px rgba(0,0,0,.85)}
+#scene{position:absolute;inset:0;z-index:0}
+#scene svg{width:100%;height:100%;display:block}
+#s24 .wrap{z-index:2}
+#s24 .close-small{margin-top:30px;font-size:.85rem;color:#cfd6dd;text-shadow:0 1px 20px rgba(0,0,0,.9),0 0 6px rgba(0,0,0,.6);max-width:640px;line-height:1.8;margin-left:auto;margin-right:auto}
+#s24 .close-logo{height:34px;margin-top:52px;opacity:.9}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .slide{padding:56px 30px 84px}
+  .c3,.cnts,.flips,.dayarc,.rule555{grid-template-columns:1fr 1fr}
+  .chainrow,.waterrow{grid-template-columns:1fr;gap:30px}
+  #bodySvg{max-width:170px}
+  .vs{grid-template-columns:1fr;gap:12px}.vs .mid{display:none}
+  .tl .stops{grid-template-columns:repeat(5,1fr)}
+  .stop p{display:none}
+  #toc .tg{grid-template-columns:1fr}
+  #s1 .arc{width:300px;height:300px;border-width:36px;top:-110px;right:-110px}
+  #hudlogo{display:none}
+}
+@media(max-width:560px){
+  .c3,.c2,.cnts,.flips,.dayarc,.rule555{grid-template-columns:1fr}
+  .flip{height:150px}
+  .tl{display:none}
+  .slide{overflow-y:auto;align-items:flex-start}
+  .stop p{display:block}
+}
+
+/* print: one slide per page */
+@media print{
+  body{background:#fff;overflow:visible}
+  #hud,#progress,#hint,#toc,#hudlogo{display:none!important}
+  #deck{display:block!important}
+  .slide{position:relative;inset:auto;opacity:1;visibility:visible;transform:none;page-break-after:always;min-height:100vh}
+  .a,.fr{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ======== ICONS ======== -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M4 16v-3.5L6 7.5C6.3 6.6 7.1 6 8 6h8c.9 0 1.7.6 2 1.5l2 5V16"/><path d="M4 12.5h16"/><circle cx="7.5" cy="16.5" r="1.6"/><circle cx="16.5" cy="16.5" r="1.6"/><path d="M9.2 16.5h5.6"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13.2" cy="4.3" r="1.7"/><path d="M12.8 7.5l-2.6 4.6 1.8 3.2v5.2"/><path d="M12.8 7.5c1.1.2 2 .9 2.5 1.9l1.4 2.6"/><path d="M10.2 12.1l-2.7 8.4"/><path d="M12.8 7.5L9.9 9l-1.4 2.8"/></symbol>
+  <symbol id="i-ladder" viewBox="0 0 24 24"><path d="M8 3v18M16 3v18M8 7.5h8M8 12h8M8 16.5h8"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5L5.5 13H11l-1 8.5L17.5 11H12l1-8.5z"/></symbol>
+  <symbol id="i-updown" viewBox="0 0 24 24"><path d="M12 4v16M12 4L8.8 7.2M12 4l3.2 3.2M12 20l-3.2-3.2M12 20l3.2-3.2"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v14.5M12 18.5L7.5 14M12 18.5l4.5-4.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L19.5 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3c3.4 4.1 5.8 7.2 5.8 10.1a5.8 5.8 0 1 1-11.6 0C6.2 10.2 8.6 7.1 12 3z"/></symbol>
+  <symbol id="i-food" viewBox="0 0 24 24"><path d="M4 13h16a8 8 0 0 1-16 0z"/><path d="M9.5 13c-.5-3.5 1-6 3-9"/><path d="M13.5 13c0-2.5 1.5-4.5 3.5-5.5"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 13.6A8.4 8.4 0 0 1 10.4 4 7.6 7.6 0 1 0 20 13.6z"/></symbol>
+  <symbol id="i-run" viewBox="0 0 24 24"><circle cx="14.4" cy="4.2" r="1.7"/><path d="M13.8 7.6l-4 2.8 1.5 3.4-3.2 6"/><path d="M13.8 7.6c1.2 0 2.2.6 2.9 1.6l1.5 2.2h2.6"/><path d="M11.3 13.8l3.8 1.9 1.2 5.1"/><path d="M9.8 10.4l-3.1.8-2.5 1.5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5V5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3L7 7M17 17l1.7 1.7M18.7 5.3L17 7M7 17l-1.7 1.7"/></symbol>
+  <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M3.5 18h17M7 21h10"/><path d="M8 15a4 4 0 0 1 8 0"/><path d="M12 5v3.2M5.4 8.4L7.2 10.2M18.6 8.4l-1.8 1.8"/></symbol>
+  <symbol id="i-backpack" viewBox="0 0 24 24"><path d="M8.2 6.2a3.8 3.8 0 0 1 7.6 0"/><rect x="5" y="6.2" width="14" height="14.3" rx="3"/><path d="M5 12.5h14"/><path d="M9.5 12.5v3.2h5v-3.2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.5v13l9.5-6.5z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.7v5.5c0 4.5-2.9 7.9-7 9.8-4.1-1.9-7-5.3-7-9.8V5.7z"/><path d="M9 11.9l2.2 2.2 4.3-4.6"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><rect x="5.5" y="3.5" width="13" height="17" rx="1.2"/><path d="M9.3 7.5h1.8M13.5 7.5h1.8M9.3 11.2h1.8M13.5 11.2h1.8M9.3 14.9h1.8M13.5 14.9h1.8"/><path d="M11 20.5v-2.8h2.6v2.8"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.4" r="3"/><path d="M3.4 19.2c.6-3.1 2.9-4.7 5.6-4.7s5 1.6 5.6 4.7"/><circle cx="17" cy="9.4" r="2.3"/><path d="M16.2 14.6c2.4.1 4 1.5 4.5 3.9"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.4 20c.8-3.6 3.4-5.3 6.6-5.3s5.8 1.7 6.6 5.3"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.3c-5.4-3.7-8.4-6.9-8.4-10.4 0-2.5 1.9-4.4 4.3-4.4 1.6 0 3.1.8 4.1 2.2 1-1.4 2.5-2.2 4.1-2.2 2.4 0 4.3 1.9 4.3 4.4 0 3.5-3 6.7-8.4 10.4z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5L2.8 19.7h18.4z"/><path d="M12 9.8v4.4M12 17.2v.2"/></symbol>
+  <symbol id="i-fuel" viewBox="0 0 24 24"><path d="M5 20.5V5.5a2 2 0 0 1 2-2h5.5a2 2 0 0 1 2 2v15"/><path d="M3.5 20.5h12.5"/><path d="M14.5 10h2a2 2 0 0 1 2 2v4.5a1.4 1.4 0 0 0 2.8 0V8.7L19 6.2"/><path d="M7.3 6.5h5v3.8h-5z"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M20.3 7.6a4.9 4.9 0 0 1-6.4 6L8 19.5a2.2 2.2 0 0 1-3.2-3.2l5.9-5.8a4.9 4.9 0 0 1 6-6.4l-2.8 2.8.5 2.7 2.7.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5.5v13M15 5.5v13"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.3"/><path d="M12 7.3v4.7l3.3 2"/></symbol>
+  <symbol id="i-terrain" viewBox="0 0 24 24"><path d="M3 19l6.3-11 4 6.5 2.4-3.4L21 19z"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 17.5a8.5 8.5 0 1 1 15 0"/><path d="M12 14l3.6-4.2"/><circle cx="12" cy="14" r="1.1"/></symbol>
+  <symbol id="i-dumb" viewBox="0 0 24 24"><path d="M7 8.5v7M17 8.5v7M3.8 10.3v3.4M20.2 10.3v3.4M7 12h10"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4.5v14M8.5 18.5h7"/><path d="M12 6L5.5 8M12 6l6.5 2"/><path d="M5.5 8L3.2 13.4a2.6 2.6 0 0 0 4.6 0z"/><path d="M18.5 8l-2.3 5.4a2.6 2.6 0 0 0 4.6 0z"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5.5a2.6 2.6 0 0 0-5-1 2.9 2.9 0 0 0-2.3 3.6A3.1 3.1 0 0 0 4 13a3.1 3.1 0 0 0 1.3 4.4A2.9 2.9 0 0 0 9.5 20a2.6 2.6 0 0 0 2.5-2z"/><path d="M12 5.5a2.6 2.6 0 0 1 5-1 2.9 2.9 0 0 1 2.3 3.6A3.1 3.1 0 0 1 20 13a3.1 3.1 0 0 1-1.3 4.4A2.9 2.9 0 0 1 14.5 20a2.6 2.6 0 0 1-2.5-2z"/><path d="M12 5.5V18"/></symbol>
+  <symbol id="i-battery" viewBox="0 0 24 24"><rect x="3" y="8" width="16" height="8" rx="2"/><path d="M21.5 11v2"/><path d="M6.5 11v2M9.5 11v2M12.5 11v2"/></symbol>
+</svg>
+
+<!-- ======== DECK ======== -->
+<div id="deck">
+
+<!-- S1 · title -->
+<section class="slide" id="s1" data-title="Насловна" data-sec="My Spa × EVN">
+  <div class="arc"></div>
+  <div class="wrap">
+    <img class="hero-logo a" style="--i:0" src="data:image/png;base64,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" alt="My Spa">
+    <div class="kicker a" style="--i:1">My Spa × ЕВН Македонија · Програма за добросостојба</div>
+    <h1 class="a" style="--i:2">Вашето тело е вашата<br><span class="accent">главна алатка.</span></h1>
+    <div class="bar a" style="--i:3"></div>
+    <p class="lead a" style="--i:3">Здравје, енергија и безбедност за теренските тимови на ЕВН.</p>
+    <div class="meta a" style="--i:4">
+      <div><b>Подготвено од</b>My Spa · myspa.mk</div>
+      <div><b>За</b>ЕВН Македонија · теренски тимови</div>
+      <div><b>Година</b>2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- S2 · agenda -->
+<section class="slide" id="s2" data-title="Агенда" data-sec="Агенда">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">Што ќе разгледаме денес</div>
+    <h2 class="a" style="--i:0">Пет теми. Една цел:<br>долг и здрав работен век.</h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="ag">
+      <div class="it a" style="--i:2"><span class="num">01</span><div><div class="tt">Вашето тело е вашата главна алатка</div><div class="ds">Зошто телото е единствената опрема што не се заменува</div></div></div>
+      <div class="it a" style="--i:3"><span class="num">02</span><div><div class="tt">Ризици при работа</div><div class="ds">Што навистина му се случува на телото во еден теренски ден</div></div></div>
+      <div class="it a" style="--i:4"><span class="num">03</span><div><div class="tt">Добросостојба</div><div class="ds">Исхрана, хидратација, сон и движење</div></div></div>
+      <div class="it a" style="--i:5"><span class="num">04</span><div><div class="tt">Превенција</div><div class="ds">Мали навики со огромен ефект</div></div></div>
+      <div class="it a" style="--i:6"><span class="num">05</span><div><div class="tt">Безбедност и здравје при работа</div><div class="ds">Здрав работник е побезбеден работник</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 · body = tool -->
+<section class="slide" id="s3" data-title="Единствената алатка" data-sec="01 · Вашето тело">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">01 · Вашето тело е вашата главна алатка</div>
+    <h2 class="a" style="--i:0">Единствената алатка што<br>не можете да ја <span class="accent">замените.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="cards c3">
+      <div class="card a" style="--i:2">
+        <div class="ic-wrap"><svg class="ic"><use href="#i-car"/></svg></div>
+        <h3>Автомобилот</h3><p>Може да се сервисира. Секој дел има замена.</p>
+      </div>
+      <div class="card a" style="--i:3">
+        <div class="ic-wrap"><svg class="ic"><use href="#i-wrench"/></svg></div>
+        <h3>Опремата</h3><p>Може да се замени. Нова доаѓа веднаш.</p>
+      </div>
+      <div class="card hl a" style="--i:4">
+        <div class="ic-wrap"><svg class="ic"><use href="#i-user"/></svg></div>
+        <h3>Телото</h3><p>Мора да ве служи целата кариера. И долго по неа.</p>
+      </div>
+    </div>
+    <p class="note a" style="--i:5">Не го чуваме телото само за работа. <strong>Не работиме цел живот за да седиме кога ќе завршиме.</strong></p>
+  </div>
+</section>
+
+<!-- S4 · body chain -->
+<section class="slide" id="s4" data-title="Телото е синџир" data-sec="01 · Вашето тело">
+  <div class="wrap">
+    <div class="chainrow">
+      <div class="a" style="--i:1">
+        <svg id="bodySvg" viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle class="outline" cx="100" cy="38" r="21"/>
+          <path class="outline" d="M78 66 C70 70 62 75 56 85 C49 97 46 116 44 140 L38 188 C37 198 40 205 46 205 L53 205 C58 205 60 199 61 191 L68 142 C69 132 70 122 70 112 M70 112 C68 150 70 180 76 208 C79 226 77 248 75 268 L72 330 L73 390 L95 390 L94 330 L96 272 C97 252 98 242 100 234 C102 242 103 252 104 272 L106 330 L105 390 L127 390 L128 330 L125 268 C123 248 121 226 124 208 C130 180 132 150 130 112 M130 112 C130 122 131 132 132 142 L139 191 C140 199 142 205 147 205 L154 205 C160 205 163 198 162 188 L156 140 C154 116 151 97 144 85 C138 75 130 70 122 66 C115 62 108 60 100 60 C92 60 85 62 78 66"/>
+          <g id="spots">
+            <circle class="spot" cx="84" cy="384" r="6" style="animation-delay:.3s"/><circle class="halo" cx="84" cy="384" r="8" style="animation-delay:.3s"/>
+            <circle class="spot" cx="84" cy="300" r="6" style="animation-delay:.65s"/><circle class="halo" cx="84" cy="300" r="8" style="animation-delay:.65s"/>
+            <circle class="spot" cx="117" cy="207" r="6" style="animation-delay:1s"/><circle class="halo" cx="117" cy="207" r="8" style="animation-delay:1s"/>
+            <circle class="spot" cx="100" cy="176" r="6" style="animation-delay:1.35s"/><circle class="halo" cx="100" cy="176" r="8" style="animation-delay:1.35s"/>
+            <circle class="spot" cx="100" cy="106" r="6" style="animation-delay:1.7s"/><circle class="halo" cx="100" cy="106" r="8" style="animation-delay:1.7s"/>
+            <circle class="spot" cx="100" cy="65" r="6" style="animation-delay:2.05s"/><circle class="halo" cx="100" cy="65" r="8" style="animation-delay:2.05s"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <div class="kicker a" style="--i:0">01 · Вашето тело е вашата главна алатка</div>
+        <h2 class="a" style="--i:0">Телото е синџир.<br>Функционира како <span class="accent">една целина.</span></h2>
+        <div class="bar a" style="--i:1"></div>
+        <div class="chain-it a" style="--i:2"><div class="dot">1</div><p>Проблем во <b>стапалото</b> може да влијае на <b>коленото</b>.</p></div>
+        <div class="chain-it a" style="--i:3"><div class="dot">2</div><p>Ограничено движење во <b>колкот</b> може да го оптовари <b>крстот</b>.</p></div>
+        <div class="chain-it a" style="--i:4"><div class="dot">3</div><p>Намалена подвижност на <b>градниот кош</b> создава напнатост во <b>вратот и рамената</b>.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S5 · same age, different body -->
+<section class="slide" id="s5" data-title="Исти години, различно тело" data-sec="01 · Вашето тело">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">01 · Вашето тело е вашата главна алатка</div>
+    <h2 class="a" style="--i:0">Исти години не значи <span class="accent">исто тело.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="vs">
+      <div class="wcard left a" style="--i:2">
+        <div class="age">55</div><div class="who">години · без навики</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Замор при одење</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Болки при движење</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Ограничена подвижност</div>
+      </div>
+      <div class="mid a" style="--i:3">VS</div>
+      <div class="wcard right a" style="--i:4">
+        <div class="age">55</div><div class="who">години · со навики</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Активен живот</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Добра физичка подготвеност</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Самостојност во секојдневните активности</div>
+      </div>
+    </div>
+    <p class="note fr" style="margin-top:30px"><strong>Исти години. Различни навики. Различен квалитет на живот.</strong></p>
+  </div>
+</section>
+
+<!-- S6 · workday journey -->
+<section class="slide" id="s6" data-title="Еден теренски ден" data-sec="02 · Ризици при работа">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">02 · Ризици при работа</div>
+    <h2 class="a" style="--i:0">Вашата работа е повеќе<br>од <span class="accent">читање броила.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="tl">
+      <div class="track"></div><div class="trackfill"></div>
+      <div class="stops">
+        <div class="stop a" style="--i:2"><div class="bub"><svg class="ic"><use href="#i-car"/></svg></div><h5>Возење</h5><p>врат · крст · колкови</p></div>
+        <div class="stop a" style="--i:3"><div class="bub"><svg class="ic"><use href="#i-walk"/></svg></div><h5>Пешачење</h5><p>стапала · листови · колена · колкови</p></div>
+        <div class="stop a" style="--i:4"><div class="bub"><svg class="ic"><use href="#i-ladder"/></svg></div><h5>Скали и тежок терен</h5><p>листови · колена · бутови · кардиоваскуларен систем</p></div>
+        <div class="stop a" style="--i:5"><div class="bub"><svg class="ic"><use href="#i-gauge"/></svg></div><h5>Броила</h5><p>врат · рамена · грб · колена</p></div>
+        <div class="stop a" style="--i:6"><div class="bub"><svg class="ic"><use href="#i-updown"/></svg></div><h5>Ниско и високо поставени</h5><p>врат · крст · колена · рамена</p></div>
+      </div>
+    </div>
+    <p class="note a" style="--i:7">Секој работен ден е <strong>комбинација од различни физички и ментални оптоварувања.</strong></p>
+  </div>
+</section>
+
+<!-- S7 · cumulative load -->
+<section class="slide" id="s7" data-title="Кумулативно оптоварување" data-sec="02 · Ризици при работа">
+  <div class="wrap">
+    <div class="kicker a tcenter" style="--i:0;text-align:center">02 · Ризици при работа</div>
+    <h2 class="a" style="--i:0;text-align:center">Телото не се заморува од едно движење.<br><span class="accent">Се заморува од илјадници повторувања.</span></h2>
+    <div class="cnts" style="margin-top:40px">
+      <div class="cnt-c a" style="--i:1"><div class="val"><small>×</small><span class="num" data-n="1000">0</span></div><div class="lab">чекори по терен</div></div>
+      <div class="cnt-c a" style="--i:2"><div class="val"><small>×</small><span class="num" data-n="800">0</span></div><div class="lab">наведнувања</div></div>
+      <div class="cnt-c a" style="--i:3"><div class="val"><small>×</small><span class="num" data-n="300">0</span></div><div class="lab">качувања</div></div>
+      <div class="cnt-c a" style="--i:4"><div class="val"><span class="num" data-n="250">0</span><small> ч</small></div><div class="lab">возење</div></div>
+    </div>
+    <div class="sum a" style="--i:5">
+      <div class="arrow"><svg class="ic" style="width:18px;height:18px"><use href="#i-down"/></svg></div>
+      <div class="bigbar"><i></i></div>
+      <h3>Кумулативно оптоварување</h3>
+      <p class="note center" style="margin-top:12px;text-align:center">Малите оптоварувања, повторувани секој ден, постепено доведуваат до замор и преоптоварување на телото.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S8 · signals -->
+<section class="slide" id="s8" data-title="Сигнали од телото" data-sec="02 · Ризици при работа">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">02 · Ризици при работа</div>
+    <h2 class="a" style="--i:0">Најчестите сигнали што<br>телото ни ги <span class="accent">испраќа.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="pills">
+      <div class="pill a" style="--i:2"><svg class="ic"><use href="#i-alert"/></svg>Вкочанетост</div>
+      <div class="pill a" style="--i:3"><svg class="ic"><use href="#i-battery"/></svg>Замор</div>
+      <div class="pill a" style="--i:4"><svg class="ic"><use href="#i-updown"/></svg>Намалена подвижност</div>
+      <div class="pill a" style="--i:5"><svg class="ic"><use href="#i-heart"/></svg>Болка што се повторува</div>
+      <div class="pill a" style="--i:6"><svg class="ic"><use href="#i-down"/></svg>Чувство на тежина</div>
+    </div>
+    <p class="note a" style="--i:7">Телото често предупредува <strong>многу пред да се појави поголем проблем.</strong> Овие сигнали не се слабост. Тие се информација.</p>
+  </div>
+</section>
+
+<!-- S9 · statement -->
+<section class="slide plain" id="s9" data-title="Што можеме" data-sec="02 · Ризици при работа">
+  <div class="wrap tcenter">
+    <p class="statement a" style="--i:0;margin:0 auto">Не можеме да ја контролираме<br>секоја ситуација на терен.</p>
+    <div class="bar a" style="--i:1"></div>
+    <p class="statement fr" style="margin:0 auto"><span class="accent">Но можеме секој ден да градиме тело</span><br>што подобро ќе се справува со нив.</p>
+  </div>
+</section>
+<!-- S10 · car vs body (flip) -->
+<section class="slide" id="s10" data-title="Телото е како автомобил" data-sec="03 · Добросостојба">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">03 · Добросостојба</div>
+    <h2 class="a" style="--i:0">Телото е како <span class="accent">автомобил.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="swap-h a" style="--i:1">
+      <div class="sw car">Автомобилот има потреба од:</div>
+      <div class="sw body">Телото има потреба од:</div>
+    </div>
+    <div class="flips">
+      <div class="flip a" style="--i:2">
+        <div class="f"><svg class="ic"><use href="#i-fuel"/></svg><h5>Гориво</h5></div>
+        <div class="b"><svg class="ic"><use href="#i-food"/></svg><h5>Исхрана</h5></div>
+      </div>
+      <div class="flip a" style="--i:3">
+        <div class="f"><svg class="ic"><use href="#i-drop"/></svg><h5>Вода и течности</h5></div>
+        <div class="b"><svg class="ic"><use href="#i-drop"/></svg><h5>Хидратација</h5></div>
+      </div>
+      <div class="flip a" style="--i:4">
+        <div class="f"><svg class="ic"><use href="#i-wrench"/></svg><h5>Редовен сервис</h5></div>
+        <div class="b"><svg class="ic"><use href="#i-moon"/></svg><h5>Сон</h5></div>
+      </div>
+      <div class="flip a" style="--i:5">
+        <div class="f"><svg class="ic"><use href="#i-pause"/></svg><h5>Одмор</h5></div>
+        <div class="b"><svg class="ic"><use href="#i-run"/></svg><h5>Движење</h5></div>
+      </div>
+    </div>
+    <div class="fr" data-fx="flip10"></div>
+    <p class="note fr">Ако се грижиме за возилото, <strong>треба да се грижиме и за телото што го управува.</strong></p>
+  </div>
+</section>
+
+<!-- S11 · food -->
+<section class="slide" id="s11" data-title="Исхраната е гориво" data-sec="03 · Добросостојба">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">03 · Добросостојба</div>
+    <h2 class="a" style="--i:0">Исхраната е <span class="accent">гориво</span>, а не само оброк.</h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="cards c2">
+      <div class="panel bad a" style="--i:2">
+        <div class="ph"><svg class="ic" style="width:15px;height:15px"><use href="#i-x"/></svg>Почесто избегнувајте</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Брза храна</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Газирани пијалаци</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Слатки</div>
+      </div>
+      <div class="panel good a" style="--i:3">
+        <div class="ph"><svg class="ic" style="width:15px;height:15px"><use href="#i-check"/></svg>Подобар избор</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Сендвич со интегрален леб и протеин</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Јаткасти плодови</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Овошје</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Јогурт</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Вода</div>
+      </div>
+    </div>
+    <p class="note a" style="--i:4">Не мора да јадеме совршено. <strong>Доволно е почесто да правиме подобар избор.</strong></p>
+  </div>
+</section>
+
+<!-- S12 · water -->
+<section class="slide" id="s12" data-title="Хидратација" data-sec="03 · Добросостојба">
+  <div class="wrap">
+    <div class="waterrow">
+      <div class="a" style="--i:1">
+        <svg id="glassSvg" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="wgrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4AACC5" stop-opacity=".85"/>
+              <stop offset="1" stop-color="#335FAA" stop-opacity=".9"/>
+            </linearGradient>
+            <clipPath id="gclip"><path d="M26 18 L34 126 Q34.5 132 41 132 L59 132 Q65.5 132 66 126 L74 18 Z"/></clipPath>
+          </defs>
+          <g clip-path="url(#gclip)"><rect class="g-fill" x="20" y="34" width="60" height="98"/></g>
+          <path class="g-out" d="M25 14 L34 126 Q34.5 132 41 132 L59 132 Q65.5 132 66 126 L75 14 Z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="kicker a" style="--i:0">03 · Добросостојба</div>
+        <h2 class="a" style="--i:0">Водата е наједноставната алатка<br>за <span class="accent">подобар работен ден.</span></h2>
+        <div class="bar a" style="--i:1"></div>
+        <div class="row a" style="--i:2"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Подобра концентрација</div>
+        <div class="row a" style="--i:3"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Помал замор</div>
+        <div class="row a" style="--i:4"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Подобра физичка издржливост</div>
+        <div class="row a" style="--i:5"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Поддршка за нормална функција на организмот</div>
+        <div class="tips a" style="--i:6">
+          <h6>Практични совети</h6>
+          <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Почнете го денот со вода.</div>
+          <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Пијте во текот на денот, а не само кога ќе ожедните.</div>
+          <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Во лето обрнете уште поголемо внимание на внесот на течности.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S13 · sleep -->
+<section class="slide plain" id="s13" data-title="Сонот е ноќна смена" data-sec="03 · Добросостојба">
+  <div class="moon"></div>
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">03 · Добросостојба</div>
+    <h2 class="a" style="--i:0">Сонот е <span class="accent">ноќната смена</span><br>на вашето тело.</h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="cards c2" style="max-width:760px">
+      <div class="card a" style="--i:2"><div class="ic-wrap"><svg class="ic"><use href="#i-brain"/></svg></div><h3>Мозокот се одмора</h3><p>Концентрацијата и одлуките се обновуваат.</p></div>
+      <div class="card a" style="--i:3"><div class="ic-wrap"><svg class="ic"><use href="#i-dumb"/></svg></div><h3>Мускулите се обновуваат</h3><p>Оптоварувањето од денот се санира ноќе.</p></div>
+      <div class="card a" style="--i:4"><div class="ic-wrap"><svg class="ic"><use href="#i-sunrise"/></svg></div><h3>Телото се подготвува</h3><p>За нов работен ден, со полни резерви.</p></div>
+      <div class="card a" style="--i:5"><div class="ic-wrap"><svg class="ic"><use href="#i-battery"/></svg></div><h3>Заморот се намалува</h3><p>Акумулираната тежина од денот се празни.</p></div>
+    </div>
+    <p class="note a" style="--i:6"><strong>Добриот сон не е луксуз.</strong> Тој е дел од безбедното и ефикасно работење.</p>
+  </div>
+</section>
+
+<!-- S14 · movement / 3 programs -->
+<section class="slide" id="s14" data-title="Движењето е потреба" data-sec="03 · Добросостојба">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">03 · Добросостојба</div>
+    <h2 class="a" style="--i:0">Движењето е <span class="accent">секојдневна потреба.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="dayarc">
+      <div class="day-c d1 a" style="--i:2"><div class="glow"></div><div class="when"><svg class="ic" style="width:15px;height:15px"><use href="#i-sunrise"/></svg>Пред работа</div><h3>Активирање</h3><p>Телото се буди и се подготвува за оптоварувањата на денот.</p></div>
+      <div class="day-c d2 a" style="--i:3"><div class="glow"></div><div class="when"><svg class="ic" style="width:15px;height:15px"><use href="#i-sun"/></svg>Во текот на денот</div><h3>Reset</h3><p>Кратки паузи што ја разбиваат монотонијата на повторувањата.</p></div>
+      <div class="day-c d3 a" style="--i:4"><div class="glow"></div><div class="when"><svg class="ic" style="width:15px;height:15px"><use href="#i-moon"/></svg>По работа</div><h3>Опоравување</h3><p>Телото се смирува и започнува обнова.</p></div>
+    </div>
+    <div class="fr">
+      <p class="note" style="margin-top:32px;margin-bottom:14px">Затоа подготвивме <strong>три видео програми:</strong></p>
+      <div class="vids" style="margin-top:0">
+        <div class="vid"><svg class="ic"><use href="#i-play"/></svg>АКТИВИРАЊЕ</div>
+        <div class="vid"><svg class="ic"><use href="#i-play"/></svg>RESET</div>
+        <div class="vid"><svg class="ic"><use href="#i-play"/></svg>ОБНОВА</div>
+      </div>
+      <p class="note" style="margin-top:22px">Само неколку минути можат да направат разлика во тоа како ќе се чувствувате во текот на денот.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S15 · backpack -->
+<section class="slide" id="s15" data-title="Што во ранецот" data-sec="03 · Добросостојба">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">03 · Добросостојба</div>
+    <h2 class="a" style="--i:0">Што може да понесе еден ЕВН<br>теренски работник <span class="accent">во ранец?</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="cards c2" style="max-width:820px">
+      <div class="card a" style="--i:2"><div class="ic-wrap"><svg class="ic"><use href="#i-drop"/></svg></div><h3>Шише вода</h3><p>Основата на секој теренски ден.</p></div>
+      <div class="card a" style="--i:3"><div class="ic-wrap"><svg class="ic"><use href="#i-food"/></svg></div><h3>Јаткасти плодови</h3><p>Енергија што трае, без пад на концентрација.</p></div>
+      <div class="card a" style="--i:4"><div class="ic-wrap"><svg class="ic"><use href="#i-heart"/></svg></div><h3>Банана или јаболко</h3><p>Брз и лесен извор на енергија.</p></div>
+      <div class="card a" style="--i:5"><div class="ic-wrap"><svg class="ic"><use href="#i-backpack"/></svg></div><h3>Интегрален сендвич со протеин</h3><p>Пилешко, мисирка, сирење или јајце.</p></div>
+    </div>
+    <p class="note a" style="--i:6">Плус: <strong>јогурт или кефир</strong>, ако условите дозволуваат.</p>
+  </div>
+</section>
+
+<!-- S16 · small habits -->
+<section class="slide" id="s16" data-title="Малите навики" data-sec="04 · Превенција">
+  <div class="wrap tcenter">
+    <div class="kicker a" style="--i:0">04 · Превенција</div>
+    <h2 class="a" style="--i:0">Не постои една голема работа<br>што ќе ве <span class="accent">спаси.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="pills a" style="--i:2;justify-content:center;max-width:100%">
+      <div class="pill"><svg class="ic"><use href="#i-run"/></svg>Малку повеќе движење</div>
+      <div class="pill"><svg class="ic"><use href="#i-drop"/></svg>Малку повеќе вода</div>
+      <div class="pill"><svg class="ic"><use href="#i-moon"/></svg>Малку подобар сон</div>
+      <div class="pill"><svg class="ic"><use href="#i-clock"/></svg>Неколку минути вежби</div>
+      <div class="pill"><svg class="ic"><use href="#i-check"/></svg>Подобра организација</div>
+    </div>
+    <p class="statement fr" style="margin:44px auto 0;font-size:clamp(1.3rem,2.6vw,1.9rem)">Заедно прават <span class="accent">огромна разлика.</span></p>
+  </div>
+</section>
+
+<!-- S17 · 5-5-5 -->
+<section class="slide" id="s17" data-title="Правилото 5-5-5" data-sec="04 · Превенција">
+  <div class="wrap">
+    <div class="kicker a tcenter" style="--i:0;text-align:center">04 · Превенција</div>
+    <h2 class="a" style="--i:0;text-align:center">Правилото <span class="accent">5-5-5</span></h2>
+    <div class="bar a" style="--i:1;margin-left:auto;margin-right:auto"></div>
+    <div class="rule555">
+      <div class="r5 a" style="--i:2"><div class="n5">5</div><h4>минути активација</h4><p>пред работа</p></div>
+      <div class="r5 a" style="--i:3"><div class="n5">5</div><h4>кратки reset паузи</h4><p>во текот на денот</p></div>
+      <div class="r5 a" style="--i:4"><div class="n5">5</div><h4>минути обнова</h4><p>после работа</p></div>
+    </div>
+    <p class="note center a" style="--i:5;text-align:center">Едноставен ритам што се памети лесно, а телото го чувствува секој ден.</p>
+  </div>
+</section>
+<!-- S18 · five pillars -->
+<section class="slide" id="s18" data-title="Петте столба" data-sec="04 · Превенција">
+  <div class="wrap">
+    <div class="kicker a tcenter" style="--i:0;text-align:center">04 · Превенција</div>
+    <h2 class="a" style="--i:0;text-align:center">Голема куќа. <span class="accent">Пет столба.</span></h2>
+    <svg id="pillarsSvg" viewBox="0 0 720 350" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path class="roof" d="M360 18 L692 92 L28 92 Z"/>
+      <text class="rlabel" x="360" y="76">ВАШЕТО ЗДРАВЈЕ</text>
+      <rect class="col" x="48"  y="112" width="88" height="196" rx="6" style="transition-delay:.15s"/>
+      <rect class="col" x="182" y="112" width="88" height="196" rx="6" style="transition-delay:.3s"/>
+      <rect class="col" x="316" y="112" width="88" height="196" rx="6" style="transition-delay:.45s"/>
+      <rect class="col" x="450" y="112" width="88" height="196" rx="6" style="transition-delay:.6s"/>
+      <rect class="col" x="584" y="112" width="88" height="196" rx="6" style="transition-delay:.75s"/>
+      <text class="plabel" transform="rotate(-90 92 210)" x="92" y="214">Движење</text>
+      <text class="plabel" transform="rotate(-90 226 210)" x="226" y="214">Сила</text>
+      <text class="plabel" transform="rotate(-90 360 210)" x="360" y="214">Исхрана</text>
+      <text class="plabel" transform="rotate(-90 494 210)" x="494" y="214">Хидратација</text>
+      <text class="plabel" transform="rotate(-90 628 210)" x="628" y="214">Сон</text>
+      <line class="stroke" x1="20" y1="322" x2="700" y2="322"/>
+    </svg>
+    <p class="note center a" style="--i:2;text-align:center">Ако еден столб ослабне, целата куќа го чувствува тоа.</p>
+  </div>
+</section>
+
+<!-- S19 · control -->
+<section class="slide" id="s19" data-title="Што контролираме" data-sec="04 · Превенција">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">04 · Превенција</div>
+    <h2 class="a" style="--i:0">Фокусирајте се на она што<br>можете да го <span class="accent">контролирате.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="cards c2">
+      <div class="panel bad a" style="--i:2">
+        <div class="ph"><svg class="ic" style="width:15px;height:15px"><use href="#i-x"/></svg>Не можеме да контролираме</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Времето</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Годините</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Колку броила има</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Теренот</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Работните задачи</div>
+      </div>
+      <div class="panel good a" style="--i:3">
+        <div class="ph"><svg class="ic" style="width:15px;height:15px"><use href="#i-check"/></svg>Можеме</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Да го подготвиме телото</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Да се движиме подобро</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Да се хидрираме</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Да ја подобриме силата</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Да се опоравиме</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S20 · the myth -->
+<section class="slide" id="s20" data-title="Најголемиот мит" data-sec="04 · Превенција">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">04 · Превенција · Најголемиот мит</div>
+    <p class="myth-q a" style="--i:1">„Ќе се пазам, и така ќе си го сочувам телото."</p>
+    <div class="fr" data-fx="none">
+      <div class="myth-no">НЕ СЕКОГАШ.</div>
+      <p class="myth-line">Вашата работа веќе е тренинг... <strong>но не целосен.</strong></p>
+    </div>
+    <div class="cards c2 fr">
+      <div class="panel good">
+        <div class="ph"><svg class="ic" style="width:15px;height:15px"><use href="#i-check"/></svg>Работата дава</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Пешачење</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Скали</div>
+        <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Движење</div>
+      </div>
+      <div class="panel bad">
+        <div class="ph"><svg class="ic" style="width:15px;height:15px"><use href="#i-x"/></svg>Недостасува</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Контролирано зајакнување</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Баланс</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Мобилност</div>
+        <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Опоравување</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S21 · shared responsibility -->
+<section class="slide" id="s21" data-title="Заедничка одговорност" data-sec="05 · Безбедност и здравје">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">05 · Безбедност и здравје при работа</div>
+    <h2 class="a" style="--i:0">Безбедноста е <span class="accent">заедничка одговорност.</span></h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="cards c3">
+      <div class="card a" style="--i:2">
+        <div class="ic-wrap"><svg class="ic"><use href="#i-building"/></svg></div>
+        <h3>Работодавач</h3><p>Обезбедува безбедни услови, опрема, обуки и поддршка.</p>
+      </div>
+      <div class="card a" style="--i:3">
+        <div class="ic-wrap"><svg class="ic"><use href="#i-users"/></svg></div>
+        <h3>Тим</h3><p>Се грижи за колегите и реагира кога ќе забележи ризик.</p>
+      </div>
+      <div class="card a" style="--i:4">
+        <div class="ic-wrap"><svg class="ic"><use href="#i-user"/></svg></div>
+        <h3>Вработен</h3><p>Ги почитува процедурите и се грижи за сопственото здравје и безбедност.</p>
+      </div>
+    </div>
+    <p class="note a" style="--i:5">Кога сите ја преземаат својата улога, <strong>безбедноста станува култура, а не само правило.</strong></p>
+  </div>
+</section>
+
+<!-- S22 · healthy = safer -->
+<section class="slide" id="s22" data-title="Здрав = побезбеден" data-sec="05 · Безбедност и здравје">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">05 · Безбедност и здравје при работа</div>
+    <h2 class="a" style="--i:0">Здрав работник <span class="accent">=</span> побезбеден работник.</h2>
+    <div class="bar a" style="--i:1"></div>
+    <p class="lead a" style="--i:1;margin-bottom:26px">Подобрата физичка подготвеност придонесува за:</p>
+    <div style="max-width:620px">
+      <div class="row a" style="--i:2"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Подобра концентрација</div>
+      <div class="row a" style="--i:3"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Подобра рамнотежа</div>
+      <div class="row a" style="--i:4"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Подобра контрола на движењето</div>
+      <div class="row a" style="--i:5"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Помал замор</div>
+      <div class="row a" style="--i:6"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Поголема сигурност при извршување на задачите</div>
+    </div>
+    <p class="note a" style="--i:7"><strong>Грижата за здравјето е дел од грижата за безбедноста.</strong></p>
+  </div>
+</section>
+
+<!-- S23 · most important task -->
+<section class="slide" id="s23" data-title="Најважната задача" data-sec="05 · Безбедност и здравје">
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">05 · Безбедност и здравје при работа</div>
+    <h2 class="a" style="--i:0">Вашата <span class="accent">најважна</span> задача.</h2>
+    <div class="bar a" style="--i:1"></div>
+    <div class="tasks">
+      <div class="task a" style="--i:2"><span class="tn">01</span>Да работам професионално.</div>
+      <div class="task a" style="--i:3"><span class="tn">02</span>Да се грижам за своето тело.</div>
+      <div class="task a" style="--i:4"><span class="tn">03</span>Да се грижам за моите колеги.</div>
+      <div class="task a" style="--i:5"><span class="tn">04</span>Да се вратам безбедно дома.</div>
+      <div class="task a" style="--i:6"><span class="tn">05</span>Да можам и утре повторно да ја работам работата што ја сакам.</div>
+    </div>
+    <div class="quote fr">„Ниту едно успешно завршено броило нема поголема вредност од тоа безбедно да се вратите дома, кај оние што ве чекаат."</div>
+  </div>
+</section>
+
+<!-- S24 · closing -->
+<section class="slide plain" id="s24" data-title="Завршница" data-sec="My Spa × EVN">
+  <div id="scene">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#000000"/>
+          <stop offset=".45" stop-color="#021842"/>
+          <stop offset=".78" stop-color="#335FAA" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#4AACC5" stop-opacity=".35"/>
+        </linearGradient>
+        <radialGradient id="vig" cx=".5" cy=".42" r=".62">
+          <stop offset="0" stop-color="#000000" stop-opacity=".62"/>
+          <stop offset=".7" stop-color="#000000" stop-opacity=".25"/>
+          <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="glowsun" gradientUnits="userSpaceOnUse" cx="720" cy="740" r="420">
+          <stop offset="0" stop-color="#e8a04c" stop-opacity=".42"/>
+          <stop offset=".3" stop-color="#e8a04c" stop-opacity=".16"/>
+          <stop offset=".65" stop-color="#e8a04c" stop-opacity=".05"/>
+          <stop offset="1" stop-color="#e8a04c" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="sunhalo" gradientUnits="userSpaceOnUse" cx="720" cy="738" r="110">
+          <stop offset="0" stop-color="#f2b768" stop-opacity=".9"/>
+          <stop offset=".55" stop-color="#eda95a" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#e8a04c" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1440" height="900" fill="url(#sky)"/>
+      <rect width="1440" height="900" fill="url(#vig)"/>
+      <g class="sunG">
+        <circle cx="720" cy="740" r="420" fill="url(#glowsun)"/>
+        <circle cx="720" cy="738" r="110" fill="url(#sunhalo)"/>
+        <circle cx="720" cy="738" r="54" fill="#f0af5e" opacity=".9"/>
+      </g>
+      <rect x="0" y="740" width="1440" height="160" fill="#050505"/>
+      <g stroke="#050505" stroke-width="7" fill="none" stroke-linecap="round">
+        <path d="M1090 740 L1120 430 M1190 740 L1160 430"/>
+        <path d="M1120 430 L1140 360 L1160 430"/>
+        <path d="M1098 660 L1182 660 M1104 590 L1176 590 M1110 520 L1170 520 M1116 460 L1164 460"/>
+        <path d="M1098 660 L1176 590 M1182 660 L1104 590 M1104 590 L1170 520 M1176 590 L1110 520 M1110 520 L1164 460 M1170 520 L1116 460"/>
+        <path d="M1042 520 L1110 520 M1170 520 L1238 520"/>
+        <path d="M1042 520 L1048 538 M1238 520 L1232 538"/>
+      </g>
+      <g stroke="#0a0a0a" stroke-width="3" fill="none" opacity=".45">
+        <path d="M1048 538 C 760 600 400 600 0 560"/>
+        <path d="M1232 538 C 1330 552 1395 556 1440 558"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap tcenter">
+    <p class="statement a" style="--i:0;margin:0 auto">Секој ден се грижите енергијата<br>да стигне до илјадници домови.</p>
+    <p class="statement fr" data-fx="sun1" style="margin:26px auto 0"><span class="accent">Не заборавајте да се грижите и за<br>енергијата што ве придвижува вас.</span></p>
+    <p class="close-small fr" data-fx="sun2">Вашето здравје е најважната инвестиција за безбедна работа, долг работен век и квалитетен живот.</p>
+    <img class="close-logo a" style="--i:1" src="data:image/png;base64,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" alt="My Spa">
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- ======== HUD ======== -->
+<div id="progress"></div>
+<img id="hudlogo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXMAAABkCAYAAAB0HtAFAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAHBdJREFUeAHtnYt5E8nShstgFpbd5YgIjohg5QhWjgBvBL+IAIjAIgJMBMxGgInA2ggwETBEgA4LLGADf33jatOMp29zkWbkep/H2Ggumunp+bq6urqaqAU+fPhw/59//pmTUotv376N3r9///Tdu3dHpCiKUoMr1AIQoytXruyzqL/6999//4+UaFjAH6Dc+M8ZKYqi1KQVMTewqI+/fv2aqaiH4Z7MlMvpaGtr6zH/d0SKoigNaFXMDSrqbtgSn7BL5Rn3ZI64nKakKIrSAp2IuUFF/Tt8/2P4xdkSf8H/3SNFUZQW6VTMDZdZ1I2I8/2rX1xRlM5YiZgbLpOoG5+4iriiKKtgpWJuMKLOFusLiB5tEEbE1SeuKMoqWYuYW0wgeoivhjuCBoyKuKIo62TdYl7Ag4JTuCPgWx6aqKuIK4rSB3oh5hazoYi6iriiKH2ib2Ju6K2oq4gritJHViXmOdWjN6JuQgybiDgft6D6ZaEoiuKkczGHgP3yyy93vnz5co994wuqRyHqGChddfSLJMGa8/djss+MaoAy4EZg+uuvv+7yfzNSFEVpmZW5WW7dupXdvHlzF6JWV9QxUArLeFWWOhoO/h6I+D7VyJ9ii/jPP//8NymKonTEyn3mEDWI+ufPn+9QfSu1sNS7SruLhsLyi48pERVxRVFWzdoGQG/fvp2z++VeE1FH2l1MPGrTSkdKWrhU6vjFVcQVRVkXa49maUHUJyyimHg0oQaIb/xZnZS0KuKKoqyb3oQmNhF1uEJYhI/q5nuBZS++8dRshpmKuKIofaB3ceYNRH2EfC+pgg4hh2Wf6BvPcH24ThVxRVH6QF8nDdUWdQh6bPhiqpDDnWJEHNdHiqIoPaG3Ym4woo44dYqccMOuj2ehQdEUIed9luzGeQB3ioq4oih9pPdibkCcOlvFsZNuRhDqN2/eOAcyEyzy/OTkZOfmzZtPSFEUpacMRsyBsdLZ8p6H9oVQ//TTT4+rtr179+4g0iKHW2VHrXFFUfrOoMTcwIOOj1ho70XsOkPcuP3B27dv99hlcj/i2EzcKktSFEXpOYMUc8BCm8UIOgv3vu0/397efkxhMvQASFEUZSBs04CBoLPlPZKJPi5GPHj6lH/vImFWyL0C1wqft0shH5MyGEID6Tdu3MDgeKu9N0xg+/jxo3fiGvdOc1oTKBMeR5pevXr1v3zvGJ+yrzVHefA795Lfo+O2y0Zxs4UcJHXyj5QYkX/WZPb169e/unq4fA+P+R4eBHbLKJz1MMcga5s+cqvi/8H/nchPZ3D55p8+fVpr1A03mt8id51zD+gRdQwSs1FExktpyHftz+T9mHoOWyJctU13XMT1tl5PQ6Ae8zs84z8xj2Mce5zMjj7kevm8SQOUUKdiOZYotQX/fg5tog7x1aOqeleHrQ4KKQQK7Tk/4Kwt6wJRKzzYiRmcY2qAvJQ5NQSWCj+8B1xR/vi2hgUsMCt1nZOZEurUksX8NnUMX88bikjRUPVSYc4CEq4FDm2tURLRfEUr+r6Y6+FyedpSPcaM6Ud13vuudQpGEP/M+dr+opaJeaa8ffe3335bUAPW4TOHZbrf5qITsIr4fE1dI/OmQm5yn7OQ48Htf9OViEKMus5Pz264GdVIX2zACxaRsvmBLww2Ba7H+4Fd8lUJueTxf9ViPe4022kT4J3AhEO8u3XTgngIno8buT+oIeseAG1tJSF56Q6oHo1fkKa5zy8rGKCmDuGXpPGLyXX0YWAX9AxjIqS8yDsw8+3DojOnjpGeJXojnTwbyXb6lHqIEfU210zgc84idgu5iYP0JZplhkk8Ta009hVDkHNKRCYj1QYWTN3c55cdFvNJW1ZtGXERTKkh4k/NArs1ts5jrHK+ltbdAGW43I6+dd+rnPVV0IVCk5oKOjQtUhca91J7E5qIG4YgNumCwd3Co+ghK6pMI/cKd+Mz6siCuSSMrl+/3na3toDr1F1qCW7wQz23RtZ5X6xymVAXNUiPAUT+dUhnDV3xIwOKsYPBF+aB9Amx0p81aaRTeoZNe6nrGAANwgX4iN0mc6pJRASCAe6VO1QTCDk/gE6EqAkDGgAtaGs0vwz8nym9pdB1sOBirGfuOUXtyJaYCJYmdTWGyMFXcMh17MBXx96+fTu7evUqxGlMfqLKLFCnjvl6ohuFk5OTO4gu4+eNCYQxA+MHXC9SjUQTmPEm5Rgui9t1I6O8Yi6hO4cUZkr+h4ZuampIXu2JO1yIY4lu8T6oJtErcK1QgkVulaUzPBH7cKUMhkhJXK+zPIcm5qCN0XybyCiUHwiJubycEDtfvUqONIkRUfhdu3axhBoU1E8Wwb2UuhXRAIJgmQV0qpYxAJ3gXuH9iLBmfMdOavgiBt/5nU9yJSGhX908UKFJQw+4kIMVKFQJ+Bw7IrD7FL/CPbpgyzotIgSaj30UmEw0X5WQY2AW3XS0uFJWLiE+xvqoofNhVSU+5wvaIGQ0f0Et0cbAZxk8PxanA5848XOZ8a8kMQ/5ykWsOhVycSXMfPukCjlA6g0uMwoIOsYbnqw6dYa8/w/5fXod0ArjAvmTEkAd5GeXcgjKaY9/1RLzlfnM7fzkEaFeBWil6vrQufIfeL6ndvSK+PhihTyHlcwC/bDNilqacbcptO073aMO+PjxI14057OEWycltC3GV84iOqeO4e+YBnbJ6vb2IOh01jt3Mbp27Vpr4xupQCv4uYWMxmmK7zxi8L2yDrFmTesOhK58ABSiDuszJvMhQBhT3bjPT58+wU2zrDjnjGqABxQ7SGEyLupKRNG0FnMeiC1v1KiiUYa/2LdPykClzKr0ka2iDrGY/x7YJcbd6oTfmyywfUprBIJO/ki4pAaH68B9z7aFrzz4WdRq2NYWzSKZD6NcKFzhD+qECKHh4O/4wQKHy6POywFrGKFKFBFDju/QjItOnKLQVsx5wMXSSJRAjHUe0zCJceA1VCKiaFYCl2mjuozp/L7tsRE0XRKap8JlkHKNvp5h9uXLF2d5YHykTgTNWkMTpXsTM8hpkmXV+g7L3ZJLLHoyMUm6hDncKqS4yFwb2og5D3Rvc6oxD6EMGumykVAmpmGCVR6oU1lfcunztTZ6LqEp/DFRJV0T0eCMKYJQbPnJycnfMtjvaiBH29vbyY3b2uPME1LZTuvGpBp3C7q/daxlPJzIHOgry5kxVGDhecYyGsecB2LLM2qJULc85Pvsm1XOxtLrwC6NLWeMH3l+ZrRmQg1O7FiVr2cIF4tpoH2uljq91F5MGoKgx/jQcYN1LDcpvNqhXezDCvYK0EVTIQ8DC4+F45Fne9OBS2eDz+LYakRIaIKa74XkY6d9ssojQmIbz3CFe9P3QxtAxIB2Zv7wuVpgDKSWd29mgMKHHpFbBYMQtfyqLLTPqQaR7pVjda3EAevm9PQUwtH6aL6ve2ssoja787du3Tr0RWb57gUD++Rh1b5yiaH29VoRY994evumg0bat51dLOc6JK6W3LVv6oziXq00FJNbRcIVp7QCYrrCdJZbOin+9LIDV5evi1k3g1xg4DPDP22Hdfp6GaDKOke0TcBAmK/DVx6K0mEmkq+kd7Oe26CNhipUB8tuXqQC9+yf1EvtlZjjRiXpldevvdVxpj0DJnOErHL4+nTB53R8XUyqH3PuqvydJagKpcitss4DVnnetjsollCUDug4VexaCVnVIVdURGz5hUgq7qX63EuTFMO1d2uAQhhDFgJekK4rUsxkDmauceRp8LMb43dABJNjzgOx5Qvr+1uPmkixziOs8rVFsMRE6RhsUces5lX1lrsk5Pri+z0ObPc20lWu3pAxkBJz3ssFnSNmjBUTM7pKnQr6tEjABnPo2pDa+wpEENjTo1uvMynWecgqX3edklDekLvlHGmYZsiDgxWd+OcZDK2hzVKOGRtDSKFve2Di08JznHNbSsx5L8UchBYEQMG3sSBAFZFWeV1XgCLwGAncCa6B0OiYc1/3lj8/7np9RxCyztHYhKzyVaS4jQGD+Vv1FnrB89oTi/3NUCx2pP2lcIoOb4/p7du3e75nG/CN+9xqGHiOGkPqrZiverkumwirPKsbHXPZsd0cMhC6cOwaHXMeiC2vI0rJSGRC5tllFrLKV7HwRCwQdJmhnVN9jMX+om/+dVlN6T7cRDFzSELRRQF3SO5zxyK+PWCdRxmOoayJawWTfSTlqAuzIEBrXVNrFXInfZliPUTK3W+2aJ/wC185cJmQQc5Z2ctd4y67/6gXXB9nru1DsMpt4HJhY+kwMdtpFROx1ucsWrttLeRuQC+OreujyH3RExzztUwoHm90UUgzItOIY5+p4/gi5jw04bG3ljmQwdB5YLdWrfMIq3yu0Svt4ZvWHBNzHpg6XdU17kzMJY69Tk+gV1a5jZ3tlBrOoJVB0y4WdB6hrsT80FnEU4qQH4bGMUJRMHzPwWcrLkcnMS7lXos5iAiXGrXlO4/wla8tbGyT8UUvhWLOfQOfAT9lJ8hciWXKMX20ysvYos7ihfQYOdVEFnR+0WUAQxtI5tOYVCO+DIlRYzYBlyOYUYDei3lkuFQrg5ERiwSoVd6QKitaGmwXoWfrjC13+Ck7FZCYFLkljvtqlVeB+n/r1i2MGd3B6jvSE6kzwDzBjNI+CrqsYTqPyXyKhWLIv+pXRvH43DHBTJy9F3MQk2u46QBLjFU+pJduSIQGQl2VODa2vHw+6piYyTeGlLUr+wYsTgyUYiWxmhY7BL1WNtQOyXicZSc2RDQ0eMo9tehAiZCrJRRzPggxB2w1e7s7XJFm1ABfMnnZPielDSrF9PT01FmRXTHnPhfLOgepE6zzbFMmndkWO7IgbkWuJsbs1c2G2hZwp/CvORZThisppfftiy23MyTGEHK1hGLOex3NYoOBMh6BXrjiic1gWYNFgfc829QqbwnXDExujA/Z8sA6jKOKYybl0XyJIJhWnSv1JeoCWOdsdUKknC9faTLTxiAN1C4/oz8QxUL+xd5NNtSswWIuOC7YeKLuSTRTzteFBhdjYH/X/d7QvAE+PyYjJU1+ExePCxOuW1lvBiPmABMz0Oq7tvM2WNcLSmQokzk2GbxQ3FhnjpjaC5W4Tt5yaQBoFcji3XgxnWLOVuAb2mBE1O9wue8HFnQ2izEsqB7LdcycZb2561uwWQzPKbWIL1x3MG4WEDGRaFpnQCXg91KrfEX4km9V5Dl3dc2X+rz6haS3Xvj2CWQb7B0y63iPVowvz/mgLHOAaf58Qy8cm73dkCpCo9Fqla8OnyvNdqMFYst9EQFKCYgSD/hNXdu53PMGrstzQr3qPqwBmgJiy7lsaB24JkoOTswxgs7d14wckScJswYL1CrvF7DgXOMiEnO+6Fts+ZBhURr5VtKSwcEFNQQNgs/ttNWDNUBTQKy8z8XSMeiVXhDzQblZDL5IhZSVakLhiGqVr57ImPPU2HLFAQu5d/DPpCxuiboDnL0CvflQhsWOqQzXHaSYy7TphWt7bA7gwDRctcrXQCjmHJn4yGHdaeObjuRJ8YnsWFyRirAVt7h7p1T1TtsS85xWjC/laGwOYF8WOxWG9RFIJztzbQjlm1aqCQ1OtiFe0gseu7YHQvJ6RSBvOdIebDX9Qcw7+RvZvbLGDdIyB6GVakL5WgLhiGqVrxFf8i0Ph5pqoR7IXBnYZYZ83dSAUKoMfpePaQBErBS1oBaQ2HffYP6FFNGDFXPgs+C4cszIQyA5zpyUtZKY3wRkpNQitEo8wCBp3ZQZWMWHwomiBhGFFAqhbHMAPpRtsRyuO2gx91nnaD09OT184YhqlfeAwILPZXJdLKQZoXQZzAizOVNWD8J+Hz58QJ7xmCUYe//8IhZsbnUAPtRDhbuHr+e/5v+DC02swJfUHZVoUfG5WuU9ByGovvQNJRakNEJi/A8iVrXB6kEz3jens3cvPz09fW1tx2zO32VCzTgmfG8o71xEbPmCWoa/L/M9E34OM5IwxUFb5iCwjuSFMMVAOKJa5f0iquutKz+1AzIgUmSZo+cLkeGfA3bBPLN+nor4jGPOgxS6Q3nnAsv+dZJrJ6KHei70gxfzUIa6so/LF46oVnm/8DXUhj4k1dok2N3xZ83VkpLBs5PFPHpPYNYxyLtYODxiPOM85nwVYp5TxwQmmvwQwuNpXfOTkxP1u/YIiTnPAruFtiuJwEKPWK6xEWKR7zbIlLhSQgOfket81v3uLLC9cBsP3jIHoYkmJkwxEFa0GErFukyEupnaAHcDkmO1se5nGVjjyNEiLp0h4Q3NjFnnswGhcxfJtzZCzEFgoskcvvK+LmaguAl0MzNtgLvDXvdTXC851cSIOKzxoaVcCKxoBTpxsRgwSzcwsauIOd+EaJYCSeSDAq0MOZRJC1PH4Zn6XVtl7trAlTJZfNFQ88DahYWdr127luTbZXfckntpGbmvLacWgQDKYgiVLJfL/9EAkHcDlvRDtgDH/CymiFjh/0/k/sw9YlB0Kc+46C3ze3eM3lMLjW7m2tD17FFuhP7D35G5tieG0dbi9PT0CZd77ttnY8QcSBiP6wWfuY7TTHvt0vZCAViOjFro7oughOKpW4NdCRu3kpAIe0YrBj0EWhN9eI78DsAn7/XLb4ybBcREP1SgmfYURRk8GyXmkdEPP6DhiIqibAIbJeYg1X+lmfYURdkENk7MI9YJtdGBT0VRNoK2xHxM/SI2gH8QmdoURVFCbJxlDiIHQjXTnqIoG8NGinkoXwvocvqtoijKqulczNe1HFRoIJSt942LAVYU5fKyiklDaxFzXz5szbSnVCFLo43YEDg0MxaRBuLk5AR5rHNJLXBh32vXro2/fv064d7gsT2tm/eZ4bdMeirAwihmXz5vfvXqVZxnKZNCfjg3n3chCy47r6OMOT/+to8vX5N9HpMRsHxuc67y59ifr7+Ykcv3/5K/59j+HvMdhtA1v3//ft+cyy4HH6Y8QvdJpbKtKkfMYuV72pNrOBxqioiNmgFaBtPAkQ+i/PmqUnwqw4KF9S6dLb6AFRWK5Eb8ot/nzx/QWV4SJJ4iJDVC7m58BqFmIcD/n9LZgPqf2EcE76mc44jrXLGAA3/2GHn2JU/JkoXsMX884nPeNiKyvb39GOLKQjonWXgAqZvxHVJ3F6574O13eb+5fC/2PU9oVbqmhX0euf4lX8cdcx287zM+39h+h1jgD+zFXfg4XBvOs1s61w9gMQvuDe+UhVLynszl+xYUGZQAQTbfgxWQyJrZi0aIr9FcQ26f0zouM/fP1/aYP5uhbO2Gd2hspM/c4Fh2SQc+lUpYlIo5Bywq5/l9rJ7d2KRSRm4S+aywwk9PT401bj7HPr+bv9ka3LPOh3Mvzaxjs5AxC3jxnRAik9nT7lXyNd2VzxYUAdyb/DOzP5NEcxesTnlPMqrOMJqZa4VVK0KeQ+B5+w6X2T0W00qXpTQCuPcc56paZN3cF8KJ0cjJko7RiBt3r+I+o7DWJ80HmMnxBzZazEHFQOiCFKUCdNfxm8Vpit+yKtXEJODi7YXwsPAWLgYWksLis1Iwj6w1Gff4bwj10oiyLCIwks8NxTmM24K+J4pDpryplYu/+Pzz589Rk9zM9dgrbeF85LB8JWsohPFBkU5V8v7b2URZuM21jD5+/PgSLiVYsi7XCBoBGE5WRtOxvV3W1CzKiRvEv+Qa71IC8mxGpRXF9mIaPTkG95nzfe7SwNl4MS8vXKGpbhUX4neFiE4gaNwlLwRU3B1GDEHxeWn2cCHQbOkV+0DAITRieRefGWudhfJc/Pjcf5v9ZZuxVAsjBBa7iB5+jmP9uXzehZyvaCSMXxxZDKv2xxiSGD5Ip3pkrHJ7bEnGA3LZ5wVfV9AChj9a3FcXMmaaVb/gXoGvms4akxklYNJ3mO+wejZZ4LixcdNgTdNNGENrRcy5YEbUU+yFK3TgUwlhQlbZJfCHEQgR7ZxElEV4c7sumegpe91ZcR0s6LvlaD4/F1QRSNTRiTk36in/vzgfrsE0KuJTjr0PCGNuNRKFi4UbB6eLUQyfpbiCKg0fWLC4J2kYMvY3v5IezAW4YXuF7XRmKS/LEWTGHYIyl/cUZTEur9vrg69hKdczs88ZStMh5TzG3/zsdmgD8Io5Wi+KwLc2Xp381W1jdfMyWjO+8kgo7942nkOHu/sv8Vus8IlYw7mI/NiKkliUjjv3mxtrGFY3f16IiljlP/jLDUbw5dxwcZjokCVcPpZbZ0EJ4JpxH3D9yP0sfPuXEtVVprrAZ+xb3hV/eOEL5/frqeP7i54Jehksrjv2+aS3gXPg/ZyzRX1E4oYxjWjCfS7oe4O5F2m04dofyvH79tKSQwVinrs2VoX1lZFCcA5atJ3wvw4ywHPYk1XAc8+2ccwAUKCyLzWlb32kuw/wHCbGijaibCy/srBaPcAxnQ3ILWF1i8gvjSVY8pcbinNZ7ghzDYfSwCf5y617Kaxwto4P5LuDkSLWvJC8Ytu54KGO8fXsyPVW1lmIvvw8LIurcbHIYhYYWMX1me+ZURrFe421MGNcLMKCn88BfR/4fUwDB2K+cG2MGV3mQaGZb3uqNdEVffGVGx+pB2+lki7tzLXdIRZKJOKTzi1DphBACb87F66qbryV4G1M8l5Z7gMI/A/+coNVJ4p9SpEuI+N6KfvLWaSP2JXxwmVVWtFce3LNjaK4EIuN70NcOHoR/O7P8XmdOmfCG/n3jAdJ75gfEp+87WoJ3acZ66Dv9xnd6LEuwDovfPUp7p0+csWEYzl3uHLlmcsnhptHF8V3fKo10RX8IvRC5IyP1LVdGtBKQZfBnSPyk5HSCMsyRv0t3C4ipIW4UslfbjDWO50JsC3aFwY8bew6YRs/xm8O4Hqxj4GwSYMzwaQlcnNu5TedDMM9hzd01kuYS8x7EabI4pm0CpCJEsLf5TBhs+qX3fsUH/7kxo0bv7vOaZ5Z6rgYyoSPeSTf+XTI7pZtdCv5JoqJC1U7SLfliB/AHDO0eN8lV1qzOPIscH5dcLcCRA2YCIkquGI+YGsEVsYBytyKCJiZrqgLzc/eHAzUsXAcctn/zxYGLvt7/Bz+g8+rjoNLhY+b4m+E7lnne86fF2LMVmSlUcHn3sW5+bjX5jNYnPzeXTgfwHvFjfsOjrHPyY3PX/xdC7M/eqT8/8ycF+ug4hpd92Ad/7q8DcKLyU0QVT5+zB+9rFrIuGqing2fm1zXwNuK77e3mbKx3YfoKXEjNjX3aZ6Zfd24jvJ3WMed7wd3C5fzCxo4W/iHb2TfJy51wareGj1yEbT+7KPDKH+rVgAGmoY+8UFRlHoU0SwSkpRTi0BYVMirsbt2LYLp0hpDryiXlC3zB1uLmG6LrkYb1iJmVO2oi8UPckKwqD+ghiAioBz6pSjK5eI8zhxCAN8UNc9yWEyNVSEPA5cIl3mjcEkR8l0VckW53PwwaQiDGRI7mlMNMJIsFnlOShRc5sjSN6d65CLkGo6oKJecLdcGGRSdUdz6nrDq5z2ZlDNI4Oa6fv3605iJWjLR4oAbzifaA1IUBWz5Nkre5j0JixuTxIaKmCxluvChzjhsD8SSS9inWRhgZMqbP0MOigUmf6iIK4pi8//rncCFY9Gi8gAAAABJRU5ErkJggg==" alt="">
+<div id="hud">
+  <div class="sec" id="hudSec"></div>
+  <div class="cnt" id="hudCnt" title="Преглед на слајдови (Esc)"></div>
+</div>
+<div id="hint"><b>→</b> следен слајд &nbsp;·&nbsp; <b>Esc</b> преглед &nbsp;·&nbsp; <b>F</b> цел екран</div>
+<div id="toc"><div class="ti"><h4>Преглед на презентацијата</h4><div class="tg" id="tocGrid"></div></div></div>
+
+<script>
+if(location.protocol==='http:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){location.replace('https://'+location.host+location.pathname+location.search+location.hash)}
+
+function unlock(){
+  document.getElementById('deck').style.display='block';
+  start();
+}
+
+/* ---- engine ---- */
+var slides=[].slice.call(document.querySelectorAll('.slide'));
+var cur=-1,started=false,hintGone=false;
+var hudSec=document.getElementById('hudSec'),hudCnt=document.getElementById('hudCnt'),prog=document.getElementById('progress');
+
+function frs(s){return [].slice.call(s.querySelectorAll('.fr'))}
+function pad(n){return (n<10?'0':'')+n}
+
+function applyFx(fr,on){
+  var fx=fr.getAttribute('data-fx');
+  if(fx==='flip10'){document.getElementById('s10').classList.toggle('flipped',on)}
+  if(fx==='sun1'||fx==='sun2'){document.getElementById('s24').classList.toggle(fx,on)}
+}
+function playNums(s){
+  [].slice.call(s.querySelectorAll('.num[data-n]')).forEach(function(el){
+    if(el.dataset.done)return;el.dataset.done='1';
+    var target=+el.dataset.n,t0=null,dur=1400;
+    function step(t){
+      if(!t0)t0=t;var k=Math.min(1,(t-t0)/dur);k=1-Math.pow(1-k,3);
+      el.textContent=Math.round(target*k);
+      if(k<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+function go(n,revealAll){
+  n=Math.max(0,Math.min(slides.length-1,n));
+  if(n===cur)return;
+  var down=n>cur;
+  if(cur>-1){
+    var old=slides[cur];old.classList.remove('active');
+    if(down){old.classList.add('bye');setTimeout(function(){old.classList.remove('bye')},650)}
+  }
+  cur=n;var s=slides[cur];
+  frs(s).forEach(function(f){var on=!!revealAll;f.classList.toggle('on',on);applyFx(f,on)});
+  s.classList.add('active');
+  playNums(s);
+  hudSec.textContent=s.getAttribute('data-sec')||'';
+  hudCnt.textContent=pad(cur+1)+' / '+pad(slides.length);
+  prog.style.width=((cur+1)/slides.length*100)+'%';
+  try{history.replaceState(null,'','#'+(cur+1))}catch(err){}
+  syncToc();
+}
+function next(){
+  var f=frs(slides[cur]).filter(function(x){return !x.classList.contains('on')})[0];
+  if(f){f.classList.add('on');applyFx(f,true);dropHint();return}
+  if(cur<slides.length-1){go(cur+1);dropHint()}
+}
+function prev(){
+  var on=frs(slides[cur]).filter(function(x){return x.classList.contains('on')});
+  if(on.length){var f=on[on.length-1];f.classList.remove('on');applyFx(f,false);return}
+  if(cur>0)go(cur-1,true);
+}
+function dropHint(){if(!hintGone){hintGone=true;document.getElementById('hint').classList.add('gone')}}
+
+/* toc */
+var toc=document.getElementById('toc'),tocGrid=document.getElementById('tocGrid');
+slides.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.innerHTML='<span class="n">'+pad(i+1)+'</span><span>'+s.getAttribute('data-title')+'</span>';
+  b.addEventListener('click',function(ev){ev.stopPropagation();toc.classList.remove('open');go(i)});
+  tocGrid.appendChild(b);
+});
+function syncToc(){[].slice.call(tocGrid.children).forEach(function(b,i){b.classList.toggle('now',i===cur)})}
+toc.addEventListener('click',function(ev){if(ev.target===toc)toc.classList.remove('open')});
+hudCnt.addEventListener('click',function(){toc.classList.toggle('open')});
+
+/* input */
+document.addEventListener('keydown',function(ev){
+  if(!started)return;
+  if(ev.key==='Escape'){toc.classList.toggle('open');return}
+  if(toc.classList.contains('open')){if(ev.key==='Escape')toc.classList.remove('open');return}
+  switch(ev.key){
+    case 'ArrowRight':case 'Right':case 'ArrowDown':case 'Down':case ' ':case 'PageDown':case 'Enter':ev.preventDefault();next();break;
+    case 'ArrowLeft':case 'Left':case 'ArrowUp':case 'Up':case 'PageUp':ev.preventDefault();prev();break;
+    case 'Home':go(0);break;
+    case 'End':go(slides.length-1,true);break;
+    case 'f':case 'F':
+      if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen().catch(function(){})}
+      break;
+  }
+});
+document.getElementById('deck').addEventListener('click',function(ev){
+  if(toc.classList.contains('open'))return;
+  next();
+});
+var tx=null,ty=null;
+document.addEventListener('touchstart',function(ev){tx=ev.touches[0].clientX;ty=ev.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',function(ev){
+  if(tx===null||!started)return;
+  var dx=ev.changedTouches[0].clientX-tx,dy=ev.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){dx<0?next():prev()}
+  tx=null;
+},{passive:true});
+
+function start(){
+  started=true;
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  go(isNaN(h)?0:h-1,!isNaN(h)&&h>1);
+}
+unlock();
+
+</script>
+</body>
+</html>
