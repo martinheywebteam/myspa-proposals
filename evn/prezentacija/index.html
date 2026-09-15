@@ -47,6 +47,7 @@ svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.75;st
 #gate .gvc .vc{color:var(--blue-bright);margin-left:5px;font-weight:600}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 #deck{display:none}
+body.shotview #hud,body.shotview #progress,body.shotview #hint,body.shotview #hudlogo{display:none!important}
 
 /* ---------- stage & slides ---------- */
 .slide{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:56px 64px;opacity:0;visibility:hidden;transform:translateY(28px) scale(.995);transition:opacity .75s var(--ease),transform .75s var(--ease),visibility 0s linear .75s;overflow:hidden}
@@ -376,8 +377,6 @@ body.printview .ic-body{position:absolute;left:auto!important;right:0!important;
 body.printview .ic-car{display:block!important}
 body.printview .ic-body{opacity:1!important}
 body.printview #s10 .carscene{opacity:1;transform:none;margin-bottom:14px}
-body.printview #s24 .wrap{margin-bottom:170px}
-body.printview #s24 .sunG{transform:translateY(16px)!important}
 body.printview #s24 .close-duo{margin-top:38px}
 body.printview .rfg{stroke-dashoffset:0!important}
 body.printview .r5 .n5{opacity:1!important}
@@ -995,30 +994,34 @@ body.printview .accent,body.printview .ag .num,body.printview .r5 .n5,body.print
           <stop offset=".7" stop-color="#000000" stop-opacity=".25"/>
           <stop offset="1" stop-color="#000000" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="glowsun" gradientUnits="userSpaceOnUse" cx="720" cy="740" r="420">
+        <radialGradient id="glowsun" gradientUnits="userSpaceOnUse" cx="720" cy="800" r="420">
           <stop offset="0" stop-color="#e8a04c" stop-opacity=".42"/>
           <stop offset=".3" stop-color="#e8a04c" stop-opacity=".16"/>
           <stop offset=".65" stop-color="#e8a04c" stop-opacity=".05"/>
           <stop offset="1" stop-color="#e8a04c" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="sunhalo" gradientUnits="userSpaceOnUse" cx="720" cy="738" r="110">
+        <radialGradient id="sunhalo" gradientUnits="userSpaceOnUse" cx="720" cy="798" r="110">
           <stop offset="0" stop-color="#f2b768" stop-opacity=".9"/>
           <stop offset=".55" stop-color="#eda95a" stop-opacity=".35"/>
           <stop offset="1" stop-color="#e8a04c" stop-opacity="0"/>
         </radialGradient>
+        <linearGradient id="gnd" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0a1322"/>
+          <stop offset="1" stop-color="#04060b"/>
+        </linearGradient>
       </defs>
       <rect width="1440" height="900" fill="url(#sky)"/>
       <rect width="1440" height="900" fill="url(#vig)"/>
       <g class="sunG">
-        <circle cx="720" cy="740" r="420" fill="url(#glowsun)"/>
-        <circle cx="720" cy="738" r="110" fill="url(#sunhalo)"/>
-        <circle cx="720" cy="738" r="54" fill="#f0af5e" opacity=".9"/>
+        <circle cx="720" cy="800" r="420" fill="url(#glowsun)"/>
+        <circle cx="720" cy="798" r="110" fill="url(#sunhalo)"/>
+        <circle cx="720" cy="798" r="54" fill="#f0af5e" opacity=".9"/>
       </g>
-      <rect x="0" y="740" width="1440" height="160" fill="#050505"/>
+      <rect x="0" y="798" width="1440" height="102" fill="url(#gnd)"/>
       <g stroke="#050505" stroke-width="7" fill="none" stroke-linecap="round">
-        <path d="M1090 740 L1120 430 M1190 740 L1160 430"/>
+        <path d="M1084 798 L1120 430 M1196 798 L1160 430"/>
         <path d="M1120 430 L1140 360 L1160 430"/>
-        <path d="M1098 660 L1182 660 M1104 590 L1176 590 M1110 520 L1170 520 M1116 460 L1164 460"/>
+        <path d="M1096 700 L1184 700 M1098 660 L1182 660 M1104 590 L1176 590 M1110 520 L1170 520 M1116 460 L1164 460"/>
         <path d="M1098 660 L1176 590 M1182 660 L1104 590 M1104 590 L1170 520 M1176 590 L1110 520 M1110 520 L1164 460 M1170 520 L1116 460"/>
         <path d="M1042 520 L1110 520 M1170 520 L1238 520"/>
         <path d="M1042 520 L1048 538 M1238 520 L1232 538"/>
@@ -1173,7 +1176,14 @@ function start(){
   var h=parseInt((location.hash||'').replace('#',''),10);
   go(isNaN(h)?0:h-1,!isNaN(h)&&h>1);
 }
-if(location.search.indexOf('print')>-1){
+var shotM=location.search.match(/[?&]shot=(\d+)/);
+if(shotM){
+  document.body.classList.add('shotview');
+  document.getElementById('gate').style.display='none';
+  document.getElementById('deck').style.display='block';
+  started=true;
+  go(parseInt(shotM[1],10)-1,!/[?&]fr=0/.test(location.search));
+}else if(location.search.indexOf('print')>-1){
   document.body.classList.add('printview');
   document.getElementById('gate').style.display='none';
   document.getElementById('deck').style.display='block';
