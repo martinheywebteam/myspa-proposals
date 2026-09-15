@@ -222,11 +222,14 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
 #s10.flipped .sw.body{display:block}
 
 
-/* S10 car scene (LordIcon) */
+/* S10 car scene (LordIcon): car morphs into body on flip */
 .carscene{margin:0 0 10px;display:flex;justify-content:center}
-#s10 .carscene{transition:opacity .8s var(--ease),transform .8s var(--ease)}
-#s10.flipped .carscene{opacity:.3;transform:scale(.95)}
-@media(max-width:900px){.carscene lord-icon{width:150px!important;height:150px!important}}
+.swapicons{position:relative;width:230px;height:230px}
+.swapicons lord-icon{position:absolute;inset:0;width:100%;height:100%;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.swapicons .ic-body{opacity:0;transform:scale(.8) rotate(-8deg)}
+#s10.flipped .ic-car{opacity:0;transform:scale(.8) rotate(8deg)}
+#s10.flipped .ic-body{opacity:1;transform:scale(1) rotate(0)}
+@media(max-width:900px){.swapicons{width:150px;height:150px}}
 
 /* S12 water */
 .waterrow{display:grid;grid-template-columns:240px 1fr;gap:60px;align-items:center}
@@ -602,7 +605,10 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
     <div class="kicker a" style="--i:0">03 · Добросостојба</div>
     <h2 class="a" style="--i:0">Телото е како <span class="accent">автомобил.</span></h2>
     <div class="bar a" style="--i:1"></div>
-    <div class="carscene a" style="--i:1"><lord-icon src="https://cdn.lordicon.com/njpauqoc.json" trigger="loop" delay="300" colors="primary:#dde3e9,secondary:#5B8FD4" style="width:230px;height:230px"></lord-icon></div>
+    <div class="carscene a" style="--i:1"><div class="swapicons">
+      <lord-icon class="ic-car" src="https://cdn.lordicon.com/njpauqoc.json" trigger="loop" delay="300" colors="primary:#dde3e9,secondary:#5B8FD4"></lord-icon>
+      <lord-icon class="ic-body" src="https://cdn.lordicon.com/chnoodbu.json" trigger="loop" delay="200" colors="primary:#dde3e9,secondary:#4AACC5"></lord-icon>
+    </div></div>
     <div class="swap-h a" style="--i:1">
       <div class="sw car">Автомобилот има потреба од:</div>
       <div class="sw body">Телото има потреба од:</div>
