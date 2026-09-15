@@ -171,32 +171,9 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
 .wcard.right .who{color:var(--blue-bright)}
 
 
-/* S5 animated figures */
-.figwrap{height:150px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:20px}
-.fig{height:148px;width:auto;overflow:visible}
-.fig path,.fig line{fill:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
-.fig circle.hd{fill:none;stroke-width:5}
-.fig.run path,.fig.run circle.hd{stroke:var(--teal)}
-.fig.sit path,.fig.sit circle.hd{stroke:#9aa6b0}
-.fig .shadow{fill:rgba(0,0,0,.35);stroke:none}
-.runner{animation:bob .3s ease-in-out infinite alternate}
-@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-4px)}}
-.r-legF{transform-origin:54px 74px;animation:swingL .42s ease-in-out infinite alternate}
-.r-legB{transform-origin:54px 74px;animation:swingL .42s ease-in-out infinite alternate-reverse}
-.r-armF{transform-origin:60px 42px;animation:swingA .42s ease-in-out infinite alternate-reverse}
-.r-armB{transform-origin:60px 42px;animation:swingA .42s ease-in-out infinite alternate}
-@keyframes swingL{from{transform:rotate(34deg)}to{transform:rotate(-34deg)}}
-@keyframes swingA{from{transform:rotate(28deg)}to{transform:rotate(-28deg)}}
-.tired{animation:sway 2.6s ease-in-out infinite alternate}
-@keyframes sway{from{transform:translateX(0) rotate(0)}to{transform:translateX(2px) rotate(.8deg)}}
-.t-legF{transform-origin:52px 84px;animation:shuffle 1.5s ease-in-out infinite alternate}
-.t-legB{transform-origin:52px 84px;animation:shuffle 1.5s ease-in-out infinite alternate-reverse}
-@keyframes shuffle{from{transform:rotate(7deg)}to{transform:rotate(-7deg)}}
-.painspot{fill:var(--red);stroke:none;animation:painPulse 1.6s ease-in-out infinite}
-.painring{fill:none;stroke:var(--red);stroke-width:2;animation:painHalo 1.6s ease-out infinite}
-@keyframes painPulse{0%,100%{opacity:.55}50%{opacity:1}}
-@keyframes painHalo{0%{opacity:.8;transform:scale(.6)}80%{opacity:0;transform:scale(2)}100%{opacity:0;transform:scale(2)}}
-.painspot,.painring{transform-origin:47px 76px;transform-box:view-box}
+/* S5 animated figures (LordIcon) */
+.figwrap{height:170px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.figwrap lord-icon{width:165px;height:165px}
 
 /* S6 journey timeline */
 .tl{position:relative;margin:46px 0 10px}
@@ -245,25 +222,11 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
 #s10.flipped .sw.body{display:block}
 
 
-/* S10 car scene */
-.carscene{margin:0 0 18px}.carscene svg{max-width:520px}#s10 .flip{height:180px}#s10 .bar{margin:16px 0 22px}
-.carscene svg{width:100%;max-width:600px;height:auto;display:block;overflow:visible}
-.cbody{fill:none;stroke:var(--blue-bright);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1100;stroke-dashoffset:1100;transition:stroke-dashoffset 1.8s var(--ease) .5s}
-.cwin{fill:none;stroke:rgba(91,143,212,.55);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:340;stroke-dashoffset:340;transition:stroke-dashoffset 1.4s var(--ease) 1.2s}
-.slide.active .cbody,.slide.active .cwin{stroke-dashoffset:0}
-.cwheel{fill:var(--dark-card);stroke:var(--teal);stroke-width:3}
-.chub{fill:var(--teal);stroke:none}
-.cspokes{stroke:var(--teal);stroke-width:2;stroke-linecap:round;animation:wheelspin 1.1s linear infinite}
-.cs1{transform-origin:150px 102px}
-.cs2{transform-origin:388px 102px}
-@keyframes wheelspin{to{transform:rotate(360deg)}}
-.croad{stroke:rgba(255,255,255,.22);stroke-width:3;stroke-linecap:round;stroke-dasharray:16 22;animation:roadmove .6s linear infinite}
-@keyframes roadmove{to{stroke-dashoffset:-38}}
-.cglow{fill:none;stroke:rgba(232,160,76,.85);stroke-width:3;stroke-linecap:round;opacity:0;transition:opacity .8s ease 2s}
-.slide.active .cglow{opacity:1}
+/* S10 car scene (LordIcon) */
+.carscene{margin:0 0 10px;display:flex;justify-content:center}
 #s10 .carscene{transition:opacity .8s var(--ease),transform .8s var(--ease)}
-#s10.flipped .carscene{opacity:.3;transform:scale(.97)}
-@media(max-width:900px){.carscene{display:none}}
+#s10.flipped .carscene{opacity:.3;transform:scale(.95)}
+@media(max-width:900px){.carscene lord-icon{width:150px!important;height:150px!important}}
 
 /* S12 water */
 .waterrow{display:grid;grid-template-columns:240px 1fr;gap:60px;align-items:center}
@@ -397,6 +360,7 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
   .a,.fr{opacity:1;transform:none}
 }
 </style>
+<script src="https://cdn.lordicon.com/lordicon.js" defer></script>
 </head>
 <body>
 
@@ -409,7 +373,7 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
     <div class="gi"><input type="password" id="gatePass" placeholder="Лозинка" autocomplete="off"></div>
     <button class="gb" onclick="checkPass()">Отвори</button>
     <div class="ge" id="gateError">Погрешна лозинка. Обидете се повторно.</div>
-    <div class="gf">Подготвено од <span>My Spa</span> · Интерно</div>
+    <div class="gf">Подготвено од <span>My Spa</span> · Интерно · Анимирани икони: <span>lordicon.com</span></div>
     <div class="gvc">Прегледи<span class="vc" id="visitCount">–</span></div>
   </div>
 </div>
@@ -548,19 +512,7 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
     <div class="bar a" style="--i:1"></div>
     <div class="vs">
       <div class="wcard left a" style="--i:2">
-        <div class="figwrap"><svg class="fig sit" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="tired">
-          <circle class="hd" cx="76" cy="42" r="10"/>
-          <path d="M73 53 Q56 58 52 84"/>
-          <path d="M66 62 Q50 68 50 78"/>
-          <path d="M70 60 L76 92 L72 96"/>
-          <g class="t-legF"><path d="M52 84 L60 110 L60 132 L68 133"/></g>
-          <g class="t-legB"><path d="M52 84 L46 110 L48 132 L56 133"/></g>
-          <circle class="painspot" cx="47" cy="76" r="5"/>
-          <circle class="painring" cx="47" cy="76" r="8"/>
-        </g>
-        <ellipse class="shadow" cx="58" cy="143" rx="30" ry="5"/>
-      </svg></div>
+        <div class="figwrap"><lord-icon src="https://cdn.lordicon.com/refarhxm.json" trigger="loop" delay="600" colors="primary:#a3b0bb,secondary:#e05a4e"></lord-icon></div>
       <div class="age">55</div><div class="who">години · без навики</div>
         <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Замор при одење</div>
         <div class="row dim"><span class="cross"><svg class="ic"><use href="#i-x"/></svg></span>Болки при движење</div>
@@ -568,17 +520,7 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
       </div>
       <div class="mid a" style="--i:3">VS</div>
       <div class="wcard right a" style="--i:4">
-        <div class="figwrap"><svg class="fig run" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="runner">
-          <circle class="hd" cx="66" cy="22" r="10"/>
-          <path d="M63 34 L54 74"/>
-          <g class="r-armF"><path d="M60 42 L74 60 L84 56"/></g>
-          <g class="r-armB"><path d="M60 42 L48 62 L38 60"/></g>
-          <g class="r-legF"><path d="M54 74 L68 102 L66 128 L76 130"/></g>
-          <g class="r-legB"><path d="M54 74 L44 102 L50 126 L60 128"/></g>
-        </g>
-        <ellipse class="shadow" cx="58" cy="143" rx="34" ry="5"/>
-      </svg></div>
+        <div class="figwrap"><lord-icon src="https://cdn.lordicon.com/ilhuppkd.json" trigger="loop" delay="200" colors="primary:#dde3e9,secondary:#4AACC5"></lord-icon></div>
       <div class="age">55</div><div class="who">години · со навики</div>
         <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Активен живот</div>
         <div class="row"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>Добра физичка подготвеност</div>
@@ -660,18 +602,7 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
     <div class="kicker a" style="--i:0">03 · Добросостојба</div>
     <h2 class="a" style="--i:0">Телото е како <span class="accent">автомобил.</span></h2>
     <div class="bar a" style="--i:1"></div>
-    <div class="carscene a" style="--i:1"><svg viewBox="0 0 560 132" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path class="cbody" d="M96 102 L82 102 C74 102 70 97 70 90 C70 79 82 71 102 67 L160 54 C204 45 262 44 310 55 L368 68 C400 74 424 82 430 92 C433 98 429 102 421 102 L406 102 M186 102 L352 102 M114 102 L116 102"/>
-      <path class="cwin" d="M170 60 L214 52 L292 52 L318 60 M252 52 L252 66 M166 72 L332 72"/>
-      <path class="cglow" d="M436 84 L456 80 M438 92 L460 92"/>
-      <circle class="cwheel" cx="150" cy="102" r="19"/>
-      <g class="cspokes cs1"><path d="M150 88 L150 116 M136 102 L164 102"/></g>
-      <circle class="chub" cx="150" cy="102" r="3.5"/>
-      <circle class="cwheel" cx="388" cy="102" r="19"/>
-      <g class="cspokes cs2"><path d="M388 88 L388 116 M374 102 L402 102"/></g>
-      <circle class="chub" cx="388" cy="102" r="3.5"/>
-      <line class="croad" x1="40" y1="126" x2="520" y2="126"/>
-    </svg></div>
+    <div class="carscene a" style="--i:1"><lord-icon src="https://cdn.lordicon.com/njpauqoc.json" trigger="loop" delay="300" colors="primary:#dde3e9,secondary:#5B8FD4" style="width:230px;height:230px"></lord-icon></div>
     <div class="swap-h a" style="--i:1">
       <div class="sw car">Автомобилот има потреба од:</div>
       <div class="sw body">Телото има потреба од:</div>
