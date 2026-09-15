@@ -225,7 +225,10 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
 /* S10 car scene (LordIcon): car morphs into body on flip */
 .carscene{margin:0 0 10px;display:flex;justify-content:center}
 .swapicons{position:relative;width:230px;height:230px}
-.swapicons lord-icon{position:absolute;inset:0;width:100%;height:100%;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.swapicons lord-icon,.swapicons svg.ic-body{position:absolute;inset:0;width:100%;height:100%;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.swapicons svg.ic-body .b-out{stroke:#c9d3dc;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.swapicons .breathe{transform-origin:100px 200px;animation:breathe 3.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
 .swapicons .ic-body{opacity:0;transform:scale(.8) rotate(-8deg)}
 #s10.flipped .ic-car{opacity:0;transform:scale(.8) rotate(8deg)}
 #s10.flipped .ic-body{opacity:1;transform:scale(1) rotate(0)}
@@ -607,7 +610,12 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
     <div class="bar a" style="--i:1"></div>
     <div class="carscene a" style="--i:1"><div class="swapicons">
       <lord-icon class="ic-car" src="https://cdn.lordicon.com/njpauqoc.json" trigger="loop" delay="300" colors="primary:#dde3e9,secondary:#5B8FD4"></lord-icon>
-      <lord-icon class="ic-body" src="https://cdn.lordicon.com/chnoodbu.json" trigger="loop" delay="200" colors="primary:#dde3e9,secondary:#4AACC5"></lord-icon>
+      <svg class="ic-body" viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="breathe">
+          <circle class="b-out" cx="100" cy="38" r="21"/>
+          <path class="b-out" d="M78 66 C70 70 62 75 56 85 C49 97 46 116 44 140 L38 188 C37 198 40 205 46 205 L53 205 C58 205 60 199 61 191 L68 142 C69 132 70 122 70 112 M70 112 C68 150 70 180 76 208 C79 226 77 248 75 268 L72 330 L73 390 L95 390 L94 330 L96 272 C97 252 98 242 100 234 C102 242 103 252 104 272 L106 330 L105 390 L127 390 L128 330 L125 268 C123 248 121 226 124 208 C130 180 132 150 130 112 M130 112 C130 122 131 132 132 142 L139 191 C140 199 142 205 147 205 L154 205 C160 205 163 198 162 188 L156 140 C154 116 151 97 144 85 C138 75 130 70 122 66 C115 62 108 60 100 60 C92 60 85 62 78 66"/>
+        </g>
+      </svg>
     </div></div>
     <div class="swap-h a" style="--i:1">
       <div class="sw car">Автомобилот има потреба од:</div>
