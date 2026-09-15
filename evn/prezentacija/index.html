@@ -355,13 +355,59 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
 }
 
 /* print: one slide per page */
-@media print{
-  body{background:#fff;overflow:visible}
-  #gate,#hud,#progress,#hint,#toc,#hudlogo{display:none!important}
-  #deck{display:block!important}
-  .slide{position:relative;inset:auto;opacity:1;visibility:visible;transform:none;page-break-after:always;min-height:100vh}
-  .a,.fr{opacity:1;transform:none}
-}
+/* PDF export mode (?print): dark, everything settled, one slide per 16:9 page */
+body.printview{overflow:visible;background:var(--dark)}
+body.printview *{animation:none!important;transition:none!important}
+body.printview *,body.printview{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body.printview #gate,body.printview #hud,body.printview #progress,body.printview #hint,body.printview #toc,body.printview #hudlogo{display:none!important}
+body.printview #deck{display:block!important}
+body.printview .slide{position:relative;inset:auto;width:1440px;height:810px;opacity:1;visibility:visible;transform:none;break-after:page;overflow:hidden}
+body.printview .a,body.printview .fr{opacity:1;transform:none}
+body.printview .flip{transform:none!important}
+body.printview .flip .f{display:none}
+body.printview .flip .b{transform:none!important;-webkit-backface-visibility:visible;backface-visibility:visible}
+body.printview #s10 .sw.car{display:none}
+body.printview #s10 .sw.body{display:block}
+body.printview .ic-car{display:none}
+body.printview .ic-body{opacity:1;transform:none}
+body.printview #s10 .carscene{opacity:1;transform:none}
+body.printview .rfg{stroke-dashoffset:0!important}
+body.printview .r5 .n5{opacity:1!important}
+body.printview #pillarsSvg .col{transform:scaleY(1)!important}
+body.printview #pillarsSvg .ghost{opacity:.55!important}
+body.printview #pillarsSvg .roof{opacity:1!important;transform:none!important}
+body.printview #pillarsSvg .rlabel,body.printview #pillarsSvg .plabel{opacity:1!important}
+body.printview #pillarsSvg .gline{stroke-dashoffset:0!important}
+body.printview .tl .trackfill{width:94%!important}
+body.printview .sum .bigbar i{width:100%!important}
+body.printview #glassSvg .g-fill{transform:scaleY(1)!important}
+body.printview #bodySvg .spot{opacity:1!important}
+body.printview #bodySvg .halo{display:none}
+body.printview .cbody,body.printview .cwin{stroke-dashoffset:0!important}
+body.printview .cglow{opacity:1!important}
+body.printview .sunG{opacity:1!important;transform:none!important}
+/* re-assert desktop layouts: print media queries use paper width, not @page */
+body.printview .c3{grid-template-columns:repeat(3,1fr)!important}
+body.printview .c2{grid-template-columns:repeat(2,1fr)!important}
+body.printview .cnts,body.printview .flips{grid-template-columns:repeat(4,1fr)!important}
+body.printview .dayarc,body.printview .rule555{grid-template-columns:repeat(3,1fr)!important}
+body.printview .chainrow{grid-template-columns:300px 1fr!important;gap:56px!important}
+body.printview .waterrow{grid-template-columns:240px 1fr!important;gap:60px!important}
+body.printview .vs{grid-template-columns:1fr 44px 1fr!important;gap:20px!important}
+body.printview .vs .mid{display:flex!important}
+body.printview .slide{padding:56px 64px!important}
+body.printview .stop p{display:block!important}
+body.printview .tl{display:block!important}
+body.printview #bodySvg{max-width:280px!important}
+body.printview .figwrap lord-icon{width:165px!important;height:165px!important}
+body.printview .swapicons{width:230px!important;height:230px!important}
+body.printview #s1 .arc{width:430px;height:430px;border-width:52px;top:-150px;right:-150px}
+body.printview #toc .tg{grid-template-columns:repeat(2,1fr)}
+body.printview .flip{height:200px!important}
+body.printview html{font-size:16px}
+/* gradient-clipped text prints with box artifacts: use solid accent in PDF */
+body.printview .accent,body.printview .ag .num,body.printview .r5 .n5,body.printview .total17 .tbig{background:none!important;-webkit-text-fill-color:#4AACC5!important;color:#4AACC5!important}
+@page{size:1440px 810px;margin:0}
 </style>
 <script src="https://cdn.lordicon.com/lordicon.js" defer></script>
 </head>
@@ -1119,7 +1165,18 @@ function start(){
   var h=parseInt((location.hash||'').replace('#',''),10);
   go(isNaN(h)?0:h-1,!isNaN(h)&&h>1);
 }
+if(location.search.indexOf('print')>-1){
+  document.body.classList.add('printview');
+  document.getElementById('gate').style.display='none';
+  document.getElementById('deck').style.display='block';
+  slides.forEach(function(sl){
+    sl.classList.add('active');
+    frs(sl).forEach(function(fr){fr.classList.add('on');applyFx(fr,true)});
+    [].slice.call(sl.querySelectorAll('.num[data-n]')).forEach(function(el){el.dataset.done='1';el.textContent=el.dataset.n});
+  });
+}else{
 try{if(sessionStorage.getItem('evnDeckOk')==='1'){unlock()}}catch(err){}
+}
 
 /* visit counter */
 (function(){
