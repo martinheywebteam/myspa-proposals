@@ -363,14 +363,22 @@ body.printview #gate,body.printview #hud,body.printview #progress,body.printview
 body.printview #deck{display:block!important}
 body.printview .slide{position:relative;inset:auto;width:1440px;height:810px;opacity:1;visibility:visible;transform:none;break-after:page;overflow:hidden}
 body.printview .a,body.printview .fr{opacity:1;transform:none}
-body.printview .flip{transform:none!important}
-body.printview .flip .f{display:none}
-body.printview .flip .b{transform:none!important;-webkit-backface-visibility:visible;backface-visibility:visible}
-body.printview #s10 .sw.car{display:none}
-body.printview #s10 .sw.body{display:block}
-body.printview .ic-car{display:none}
-body.printview .ic-body{opacity:1;transform:none}
-body.printview #s10 .carscene{opacity:1;transform:none}
+body.printview .flip{transform:none!important;height:auto!important}
+body.printview .flip .f,body.printview .flip .b{position:static!important;transform:none!important;display:flex!important;-webkit-backface-visibility:visible;backface-visibility:visible;padding:16px 12px;gap:10px}
+body.printview .flip .f{border-radius:18px 18px 0 0;border-bottom:none}
+body.printview .flip .b{border-radius:0 0 18px 18px;border-top:1px dashed rgba(255,255,255,.16)}
+body.printview .flip .f svg.ic,body.printview .flip .b svg.ic{width:24px;height:24px}
+body.printview #s10 .swap-h{display:none}
+body.printview .swapicons{position:relative;width:440px!important;height:150px!important}
+body.printview .swapicons lord-icon{width:150px!important;height:150px!important;opacity:1!important;transform:none!important}
+body.printview .ic-car{position:absolute;left:0!important;right:auto!important;top:0!important;bottom:auto!important}
+body.printview .ic-body{position:absolute;left:auto!important;right:0!important;top:0!important;bottom:auto!important}
+body.printview .ic-car{display:block!important}
+body.printview .ic-body{opacity:1!important}
+body.printview #s10 .carscene{opacity:1;transform:none;margin-bottom:14px}
+body.printview #s24 .wrap{margin-bottom:170px}
+body.printview #s24 .sunG{transform:translateY(16px)!important}
+body.printview #s24 .close-duo{margin-top:38px}
 body.printview .rfg{stroke-dashoffset:0!important}
 body.printview .r5 .n5{opacity:1!important}
 body.printview #pillarsSvg .col{transform:scaleY(1)!important}
