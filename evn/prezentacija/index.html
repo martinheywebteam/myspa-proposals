@@ -50,8 +50,8 @@ svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.75;st
 body.shotview #hud,body.shotview #progress,body.shotview #hint,body.shotview #hudlogo{display:none!important}
 
 /* ---------- stage & slides ---------- */
-.slide{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:56px 64px;opacity:0;visibility:hidden;transform:translateY(28px) scale(.995);transition:opacity .75s var(--ease),transform .75s var(--ease),visibility 0s linear .75s;overflow:hidden}
-.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.slide{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:56px 64px;opacity:0;visibility:hidden;transform:translateY(28px) scale(.995);transition:opacity 1.15s var(--ease),transform 1.15s var(--ease),visibility 0s linear 1.15s;overflow:hidden}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity 1.15s var(--ease),transform 1.15s var(--ease)}
 .slide.bye{opacity:0;visibility:hidden;transform:translateY(-18px) scale(.99)}
 .wrap{position:relative;z-index:2;width:100%;max-width:1120px}
 .slide::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 700px 520px at 12% 8%,rgba(51,95,170,.13) 0%,transparent 70%),radial-gradient(ellipse 600px 480px at 92% 96%,rgba(74,172,197,.07) 0%,transparent 70%);pointer-events:none}
@@ -71,10 +71,10 @@ h2{font-size:clamp(2rem,3.7vw,2.8rem);font-weight:800;line-height:1.18;color:var
 .tcenter{text-align:center}.tcenter .bar{margin-left:auto;margin-right:auto}
 
 /* reveal choreography: .a items stagger in when slide activates */
-.a{opacity:0;transform:translateY(22px);transition:opacity .85s var(--ease),transform .85s var(--ease);transition-delay:calc(.35s + var(--i,0)*.17s)}
+.a{opacity:0;transform:translateY(24px);transition:opacity 1.2s var(--ease),transform 1.2s var(--ease);transition-delay:calc(.55s + var(--i,0)*.24s)}
 .slide.active .a{opacity:1;transform:none}
 /* manual fragments */
-.fr{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.fr{opacity:0;transform:translateY(20px);transition:opacity 1.05s var(--ease),transform 1.05s var(--ease)}
 .fr.on{opacity:1;transform:none}
 
 /* cards */
@@ -1107,7 +1107,7 @@ function go(n,revealAll){
   var down=n>cur;
   if(cur>-1){
     var old=slides[cur];old.classList.remove('active');
-    if(down){old.classList.add('bye');setTimeout(function(){old.classList.remove('bye')},650)}
+    if(down){old.classList.add('bye');setTimeout(function(){old.classList.remove('bye')},1200)}
   }
   cur=n;var s=slides[cur];
   frs(s).forEach(function(f){var on=!!revealAll;f.classList.toggle('on',on);applyFx(f,on)});
