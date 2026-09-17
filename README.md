@@ -18,7 +18,7 @@ Password-protected bilingual (MK/EN) corporate wellness proposals.
 
 | Client | Link | Password | Status |
 |--------|------|----------|--------|
-| EVN Macedonia — Wellbeing deck | [/evn/prezentacija](https://proposals.myspa.mk/evn/prezentacija) | `evntest2026` | Live |
+| EVN Macedonia — Wellbeing deck | [/evn/prezentacija](https://proposals.myspa.mk/evn/prezentacija) | none | Live |
 
 ---
 
