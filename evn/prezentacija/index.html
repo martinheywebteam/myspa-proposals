@@ -48,6 +48,8 @@ svg.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.75;st
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 #deck{display:none}
 body.shotview #hud,body.shotview #progress,body.shotview #hint,body.shotview #hudlogo{display:none!important}
+body.shotview *{transition-duration:0s!important;transition-delay:0s!important;animation-delay:0s!important;animation-duration:.01s!important}
+body.shotview .runner,body.shotview .cspokes,body.shotview .croad{animation:none!important}
 
 /* ---------- stage & slides ---------- */
 .slide{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:56px 64px;opacity:0;visibility:hidden;transform:translateY(28px) scale(.995);transition:opacity 1.6s var(--ease),transform 1.6s var(--ease),visibility 0s linear 1.6s;overflow:hidden}
@@ -1182,6 +1184,7 @@ if(shotM){
   document.getElementById('gate').style.display='none';
   document.getElementById('deck').style.display='block';
   started=true;
+  [].slice.call(document.querySelectorAll('.num[data-n]')).forEach(function(el){el.dataset.done='1';el.textContent=el.dataset.n});
   go(parseInt(shotM[1],10)-1,!/[?&]fr=0/.test(location.search));
 }else if(location.search.indexOf('print')>-1){
   document.body.classList.add('printview');
